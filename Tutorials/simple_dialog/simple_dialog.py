@@ -17,6 +17,12 @@ class Form(QDialog):
         layout.addWidget(self.button)
         # Set dialog layout
         self.setLayout(layout)
+        # Add button signal to greetings slot
+        self.button.clicked.connect(self.greetings)
+
+    # Greets the user
+    def greetings(self):
+        print("Hello {}".format(self.edit.text()))
 
 
 if __name__ == '__main__':
