@@ -1,7 +1,12 @@
+import sys
 import argparse
 import pandas as pd
 
 from PySide2.QtCore import QDateTime, QTimeZone
+from PySide2.QtWidgets import QApplication
+
+from main_window import MainWindow
+from main_widget import Widget
 
 
 def transform_date(utc, timezone=None):
@@ -34,4 +39,12 @@ if __name__ == "__main__":
     options.add_argument("-f", "--file", type=str, required=True)
     args = options.parse_args()
     data = read_data(args.file)
-    print(data)
+
+    # Qt Application
+    app = QApplication(sys.argv)
+
+    widget = Widget(data)
+    window = MainWindow(widget)
+    window.show()
+
+    sys.exit(app.exec_())
