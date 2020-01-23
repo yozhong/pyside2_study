@@ -1,11 +1,21 @@
 import sys
 
 from PySide2.QtCore import Slot
-from PySide2.QtWidgets import QApplication, QMainWindow, QAction
+from PySide2.QtWidgets import QApplication, QMainWindow, QAction, QWidget
+
+
+class Widget(QWidget):
+    def __init__(self):
+        QWidget.__init__(self)
+
+        # Example data
+        self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
+                      "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
+                      "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, widget):
         QMainWindow.__init__(self)
         self.setWindowTitle("Tutorial")
 
@@ -19,9 +29,10 @@ class MainWindow(QMainWindow):
         exit_action.triggered.connect(self.exit_app)
 
         self.file_menu.addAction(exit_action)
+        self.setCentralWidget(widget)
 
     @Slot()
-    def exit_app(self, checked):
+    def exit_app(self):
         QApplication.quit()
 
 
@@ -29,7 +40,10 @@ if __name__ == "__main__":
     # Qt Application
     app = QApplication(sys.argv)
 
-    window = MainWindow()
+    # QWidget
+    widget = Widget()
+    # QMainWindow using QWidget as central widget
+    window = MainWindow(widget)
     window.resize(800, 600)
     window.show()
 
