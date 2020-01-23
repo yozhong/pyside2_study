@@ -1,6 +1,8 @@
 import sys
 
+from PySide2.QtCharts import QtCharts
 from PySide2.QtCore import Slot
+from PySide2.QtGui import QPainter
 from PySide2.QtWidgets import QApplication, QMainWindow, QAction, QWidget, \
     QHBoxLayout, QTableWidget, QHeaderView, QTableWidgetItem, QLineEdit, QPushButton, QVBoxLayout, QLabel
 
@@ -31,6 +33,10 @@ class Widget(QWidget):
         # Disabling 'Add' button
         self.add.setEnabled(False)
 
+        # Chart
+        self.chart_view = QtCharts.QChartView()
+        self.chart_view.setRenderHint(QPainter.Antialiasing)
+
         self.right = QVBoxLayout()
         self.right.setMargin(10)
         self.right.addWidget(QLabel("Description"))
@@ -38,7 +44,7 @@ class Widget(QWidget):
         self.right.addWidget(QLabel("Price"))
         self.right.addWidget(self.price)
         self.right.addWidget(self.add)
-        self.right.addStretch()
+        self.right.addWidget(self.chart_view)
         self.right.addWidget(self.clear)
         self.right.addWidget(self.quit)
 
