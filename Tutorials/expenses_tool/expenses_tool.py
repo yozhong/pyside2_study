@@ -2,7 +2,7 @@ import sys
 
 from PySide2.QtCharts import QtCharts
 from PySide2.QtCore import Slot
-from PySide2.QtGui import QPainter
+from PySide2.QtGui import QPainter, Qt
 from PySide2.QtWidgets import QApplication, QMainWindow, QAction, QWidget, \
     QHBoxLayout, QTableWidget, QHeaderView, QTableWidgetItem, QLineEdit, QPushButton, QVBoxLayout, QLabel
 
@@ -27,6 +27,7 @@ class Widget(QWidget):
         self.description = QLineEdit()
         self.price = QLineEdit()
         self.add = QPushButton("Add")
+        self.plot = QPushButton("Plot")
         self.clear = QPushButton("Clear")
         self.quit = QPushButton("Quit")
 
@@ -44,6 +45,7 @@ class Widget(QWidget):
         self.right.addWidget(QLabel("Price"))
         self.right.addWidget(self.price)
         self.right.addWidget(self.add)
+        self.right.addWidget(self.plot)
         self.right.addWidget(self.chart_view)
         self.right.addWidget(self.clear)
         self.right.addWidget(self.quit)
@@ -61,6 +63,7 @@ class Widget(QWidget):
         # Signals and Slots
         self.add.clicked.connect(self.add_element)
         self.quit.clicked.connect(self.quit_application)
+        self.plot.clicked.connect(self.plot_data)
         self.clear.clicked.connect(self.clear_table)
         self.description.textChanged.connect(self.check_disable)
         self.price.textChanged.connect(self.check_disable)
@@ -105,6 +108,20 @@ class Widget(QWidget):
             self.add.setEnabled(False)
         else:
             self.add.setEnabled(True)
+
+    @Slot()
+    def plot_data(self):
+        # Get table information
+        series = QtCharts.QPieSeries()
+        for i in range(self.table.rowCount()):
+            text = self.table.item(i, 0).text()
+            number = float(self.table.item(i, 1).text())
+            series.append(text, number)
+
+        chart = QtCharts.QChart()
+        chart.addSeries(series)
+        chart.legend().setAlignment(Qt.AlignLeft)
+        self.chart_view.setChart(chart)
 
 
 class MainWindow(QMainWindow):
