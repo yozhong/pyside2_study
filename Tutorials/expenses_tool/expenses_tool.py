@@ -28,6 +28,9 @@ class Widget(QWidget):
         self.clear = QPushButton("Clear")
         self.quit = QPushButton("Quit")
 
+        # Disabling 'Add' button
+        self.add.setEnabled(False)
+
         self.right = QVBoxLayout()
         self.right.setMargin(10)
         self.right.addWidget(QLabel("Description"))
@@ -49,12 +52,15 @@ class Widget(QWidget):
         # Set the layout to the QWidget
         self.setLayout(self.layout)
 
-        # Fill example data
-        self.fill_table()
-
+        # Signals and Slots
         self.add.clicked.connect(self.add_element)
         self.quit.clicked.connect(self.quit_application)
         self.clear.clicked.connect(self.clear_table)
+        self.description.textChanged.connect(self.check_disable)
+        self.price.textChanged.connect(self.check_disable)
+
+        # Fill example data
+        self.fill_table()
 
     def fill_table(self, data=None):
         data = self._data if not data else data
@@ -66,7 +72,6 @@ class Widget(QWidget):
 
     @Slot()
     def add_element(self):
-        des = self.description.text()
         des = self.description.text()
         price = self.price.text()
 
@@ -87,6 +92,13 @@ class Widget(QWidget):
     def clear_table(self):
         self.table.setRowCount(0)
         self.items = 0
+
+    @Slot()
+    def check_disable(self):
+        if not self.description.text() or not self.price.text():
+            self.add.setEnabled(False)
+        else:
+            self.add.setEnabled(True)
 
 
 class MainWindow(QMainWindow):
