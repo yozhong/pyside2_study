@@ -2,7 +2,7 @@ import sys
 
 from PySide2.QtCore import Slot
 from PySide2.QtWidgets import QApplication, QMainWindow, QAction, QWidget, \
-    QHBoxLayout, QTableWidget, QHeaderView, QTableWidgetItem
+    QHBoxLayout, QTableWidget, QHeaderView, QTableWidgetItem, QLineEdit, QPushButton, QVBoxLayout, QLabel
 
 
 class Widget(QWidget):
@@ -21,11 +21,30 @@ class Widget(QWidget):
         self.table.setHorizontalHeaderLabels(["Description", "Price"])
         self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+        # Right
+        self.description = QLineEdit()
+        self.price = QLineEdit()
+        self.add = QPushButton("Add")
+        self.clear = QPushButton("Clear")
+        self.quit = QPushButton("Quit")
+
+        self.right = QVBoxLayout()
+        self.right.setMargin(10)
+        self.right.addWidget(QLabel("Description"))
+        self.right.addWidget(self.description)
+        self.right.addWidget(QLabel("Price"))
+        self.right.addWidget(self.price)
+        self.right.addWidget(self.add)
+        self.right.addStretch()
+        self.right.addWidget(self.clear)
+        self.right.addWidget(self.quit)
+
         # QWidget Layout
         self.layout = QHBoxLayout()
 
         # self.table_view.setSizePolicy(size)
         self.layout.addWidget(self.table)
+        self.layout.addLayout(self.right)
 
         # Set the layout to the QWidget
         self.setLayout(self.layout)
