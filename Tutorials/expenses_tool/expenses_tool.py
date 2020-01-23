@@ -1,17 +1,45 @@
 import sys
 
 from PySide2.QtCore import Slot
-from PySide2.QtWidgets import QApplication, QMainWindow, QAction, QWidget
+from PySide2.QtWidgets import QApplication, QMainWindow, QAction, QWidget, \
+    QHBoxLayout, QTableWidget, QHeaderView, QTableWidgetItem
 
 
 class Widget(QWidget):
     def __init__(self):
         QWidget.__init__(self)
+        self.items = 0
 
         # Example data
         self._data = {"Water": 24.5, "Electricity": 55.1, "Rent": 850.0,
                       "Supermarket": 230.4, "Internet": 29.99, "Bars": 21.85,
                       "Public transportation": 60.0, "Coffee": 22.45, "Restaurants": 120}
+
+        # Left
+        self.table = QTableWidget()
+        self.table.setColumnCount(2)
+        self.table.setHorizontalHeaderLabels(["Description", "Price"])
+        self.table.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
+        # QWidget Layout
+        self.layout = QHBoxLayout()
+
+        # self.table_view.setSizePolicy(size)
+        self.layout.addWidget(self.table)
+
+        # Set the layout to the QWidget
+        self.setLayout(self.layout)
+
+        # Fill example data
+        self.fill_table()
+
+    def fill_table(self, data=None):
+        data = self._data if not data else data
+        for desc, price in data.items():
+            self.table.insertRow(self.items)
+            self.table.setItem(self.items, 0, QTableWidgetItem(desc))
+            self.table.setItem(self.items, 1, QTableWidgetItem(str(price)))
+            self.items += 1
 
 
 class MainWindow(QMainWindow):
