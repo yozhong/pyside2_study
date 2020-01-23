@@ -52,6 +52,10 @@ class Widget(QWidget):
         # Fill example data
         self.fill_table()
 
+        self.add.clicked.connect(self.add_element)
+        self.quit.clicked.connect(self.quit_application)
+        self.clear.clicked.connect(self.clear_table)
+
     def fill_table(self, data=None):
         data = self._data if not data else data
         for desc, price in data.items():
@@ -59,6 +63,30 @@ class Widget(QWidget):
             self.table.setItem(self.items, 0, QTableWidgetItem(desc))
             self.table.setItem(self.items, 1, QTableWidgetItem(str(price)))
             self.items += 1
+
+    @Slot()
+    def add_element(self):
+        des = self.description.text()
+        des = self.description.text()
+        price = self.price.text()
+
+        self.table.insertRow(self.items)
+        self.table.setItem(self.items, 0, QTableWidgetItem(des))
+        self.table.setItem(self.items, 1, QTableWidgetItem(price))
+
+        self.description.setText("")
+        self.price.setText("")
+
+        self.items += 1
+
+    @Slot()
+    def quit_application(self):
+        QApplication.quit()
+
+    @Slot()
+    def clear_table(self):
+        self.table.setRowCount(0)
+        self.items = 0
 
 
 class MainWindow(QMainWindow):
