@@ -1,39 +1,25 @@
 import sys
 
-from PySide2 import QtWidgets
+from PySide2.QtWidgets import (QWidget, QGridLayout, QPushButton, QApplication)
 
 
-class basicWindow(QtWidgets.QWidget):
+class basicWindow(QWidget):
 
     def __init__(self):
-        QtWidgets.QWidget.__init__(self)
+        super().__init__()
+        grid_layout = QGridLayout()
+        self.setLayout(grid_layout)
 
-        self.buttonA = QtWidgets.QPushButton('Click!')
-        self.labelA = QtWidgets.QLabel('Show Label')
+        for x in range(3):
+            for y in range(3):
+                button = QPushButton(str(3 * x + y))
+                grid_layout.addWidget(button, x, y)
 
-        h_box = QtWidgets.QHBoxLayout()
-        h_box.addStretch()
-        h_box.addWidget(self.labelA)
-        h_box.addStretch()
-
-        v_box = QtWidgets.QVBoxLayout()
-        v_box.addWidget(self.buttonA)
-        v_box.addLayout(h_box)
-
-        self.setLayout(v_box)
-
-        self.buttonA.setStyleSheet("background-color: red;font-size:18px;font-family:Times New Roman;")
-        self.buttonA.clicked.connect(self.clickCallback)
-
-        self.setWindowTitle('Box Layout Example')
-        self.setGeometry(100, 100, 300, 200)
-
-    def clickCallback(self):
-        self.labelA.setText("Button is clicked")
+        self.setWindowTitle('Basic Grid Layout')
 
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
+    app = QApplication(sys.argv)
     windowExample = basicWindow()
     windowExample.show()
     sys.exit(app.exec_())
