@@ -3,26 +3,29 @@ import sys
 from PySide2 import QtWidgets
 
 
-def basicWindow():
+class basicWindow(QtWidgets.QMainWindow):
+
+    def __init__(self):
+        QtWidgets.QMainWindow.__init__(self)
+
+        self.buttonA = QtWidgets.QPushButton(self)
+        self.labelA = QtWidgets.QLabel(self)
+
+        self.buttonA.setStyleSheet("background-color: red;font-size:18px;font-family:Times New Roman;")
+
+        self.buttonA.setText('Click!')
+        self.labelA.setText('Show Label')
+
+        self.setWindowTitle('Push Button Example')
+
+        self.buttonA.move(100, 50)
+        self.labelA.move(110, 100)
+
+        self.setGeometry(100, 100, 300, 200)
+
+
+if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    windowExample = QtWidgets.QWidget()
-
-    buttonA = QtWidgets.QPushButton(windowExample)
-    labelA = QtWidgets.QLabel(windowExample)
-
-    buttonA.setStyleSheet("background-color: red;font-size:18px;font-family:Times New Roman;");
-
-    buttonA.setText('Click!')
-    labelA.setText('Show Label')
-
-    windowExample.setWindowTitle('Push Button Example')
-    windowExample.setGeometry(100, 100, 300, 200)
-
-    buttonA.move(100, 50)
-    labelA.move(110, 100)
-
+    windowExample = basicWindow()
     windowExample.show()
     sys.exit(app.exec_())
-
-
-basicWindow()
