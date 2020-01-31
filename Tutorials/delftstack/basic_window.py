@@ -11,9 +11,15 @@ class basicWindow(QtWidgets.QWidget):
         self.buttonA = QtWidgets.QPushButton('Click!')
         self.labelA = QtWidgets.QLabel('Show Label')
 
+        h_box = QtWidgets.QHBoxLayout()
+        h_box.addStretch()
+        h_box.addWidget(self.labelA)
+        h_box.addStretch()
+
         v_box = QtWidgets.QVBoxLayout()
         v_box.addWidget(self.buttonA)
-        v_box.addWidget(self.labelA)
+        v_box.addLayout(h_box)
+
         self.setLayout(v_box)
 
         self.buttonA.setStyleSheet("background-color: red;font-size:18px;font-family:Times New Roman;")
