@@ -22,9 +22,9 @@ def basicWindow():
     labelRight.setFixedWidth(160)
     labelCenter.setFixedWidth(160)
 
-    labelLeft.setStyleSheet("border-radius: 25px;border: 1px solid black;")
-    labelRight.setStyleSheet("border-radius: 25px;border: 1px solid black;")
-    labelCenter.setStyleSheet("border-radius: 25px;border: 1px solid black;")
+    labelLeft.setStyleSheet("border-radius: 25px;border: 1px solid red;")
+    labelRight.setStyleSheet("border-radius: 25px;border: 1px solid green;")
+    labelCenter.setStyleSheet("border-radius: 25px;border: 1px solid blue;")
 
     labelLeft.setAlignment(QtCore.Qt.AlignLeft)
     labelRight.setAlignment(QtCore.Qt.AlignRight)
