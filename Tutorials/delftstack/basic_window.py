@@ -10,6 +10,8 @@ def basicWindow():
     buttonA = QtWidgets.QPushButton(windowExample)
     labelA = QtWidgets.QLabel(windowExample)
 
+    buttonA.setStyleSheet("background-color: red;font-size:18px;font-family:Times New Roman;");
+
     buttonA.setText('Click!')
     labelA.setText('Show Label')
 
