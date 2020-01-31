@@ -3,25 +3,23 @@ import sys
 from PySide2 import QtWidgets
 
 
-class basicWindow(QtWidgets.QMainWindow):
+class basicWindow(QtWidgets.QWidget):
 
     def __init__(self):
-        QtWidgets.QMainWindow.__init__(self)
+        QtWidgets.QWidget.__init__(self)
 
-        self.buttonA = QtWidgets.QPushButton(self)
-        self.labelA = QtWidgets.QLabel(self)
+        self.buttonA = QtWidgets.QPushButton('Click!')
+        self.labelA = QtWidgets.QLabel('Show Label')
+
+        v_box = QtWidgets.QVBoxLayout()
+        v_box.addWidget(self.buttonA)
+        v_box.addWidget(self.labelA)
+        self.setLayout(v_box)
 
         self.buttonA.setStyleSheet("background-color: red;font-size:18px;font-family:Times New Roman;")
         self.buttonA.clicked.connect(self.clickCallback)
 
-        self.buttonA.setText('Click!')
-        self.labelA.setText('Show Label')
-
-        self.setWindowTitle('Push Button Example')
-
-        self.buttonA.move(100, 50)
-        self.labelA.move(110, 100)
-
+        self.setWindowTitle('Box Layout Example')
         self.setGeometry(100, 100, 300, 200)
 
     def clickCallback(self):
