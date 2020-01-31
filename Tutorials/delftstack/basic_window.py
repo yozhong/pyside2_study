@@ -1,6 +1,6 @@
 import sys
 
-from PySide2 import QtWidgets
+from PySide2 import QtWidgets, QtGui
 
 
 def basicWindow():
@@ -8,6 +8,7 @@ def basicWindow():
     windowExample = QtWidgets.QWidget()
     windowExample.setGeometry(0, 0, 400, 400)
     windowExample.setWindowTitle('Basic Window Example')
+    windowExample.setWindowIcon(QtGui.QIcon("python.png"))
     windowExample.show()
     sys.exit(app.exec_())
 
