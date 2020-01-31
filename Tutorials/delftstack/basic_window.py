@@ -1,21 +1,39 @@
 import sys
 
-from PySide2 import QtWidgets, QtGui
+from PySide2 import QtWidgets, QtGui, QtCore
 
 
 def basicWindow():
     app = QtWidgets.QApplication(sys.argv)
     windowExample = QtWidgets.QWidget()
-    labelA = QtWidgets.QLabel(windowExample)
-    labelB = QtWidgets.QLabel(windowExample)
-    labelA.setText('Times Font')
-    labelA.setFont(QtGui.QFont("Times", 12, QtGui.QFont.Bold))
-    labelB.setText('Arial Font')
-    labelB.setFont(QtGui.QFont("Arial", 14, QtGui.QFont.Black))
-    windowExample.setWindowTitle('Label Example')
+
+    labelLeft = QtWidgets.QLabel(windowExample)
+    labelRight = QtWidgets.QLabel(windowExample)
+    labelCenter = QtWidgets.QLabel(windowExample)
+
+    labelLeft.setText('Left Align')
+    labelRight.setText('Right Align')
+    labelCenter.setText('Center Align')
+
+    windowExample.setWindowTitle('Label Align Example')
     windowExample.setGeometry(100, 100, 300, 200)
-    labelA.move(100, 40)
-    labelB.move(100, 120)
+
+    labelLeft.setFixedWidth(160)
+    labelRight.setFixedWidth(160)
+    labelCenter.setFixedWidth(160)
+
+    labelLeft.setStyleSheet("border-radius: 25px;border: 1px solid black;")
+    labelRight.setStyleSheet("border-radius: 25px;border: 1px solid black;")
+    labelCenter.setStyleSheet("border-radius: 25px;border: 1px solid black;")
+
+    labelLeft.setAlignment(QtCore.Qt.AlignLeft)
+    labelRight.setAlignment(QtCore.Qt.AlignRight)
+    labelCenter.setAlignment(QtCore.Qt.AlignCenter)
+
+    labelLeft.move(80, 40)
+    labelRight.move(80, 80)
+    labelCenter.move(80, 120)
+
     windowExample.show()
     sys.exit(app.exec_())
 
