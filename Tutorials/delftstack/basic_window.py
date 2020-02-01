@@ -1,5 +1,6 @@
 import sys
 
+from PySide2 import QtCore
 from PySide2.QtWidgets import (QWidget, QApplication, QHBoxLayout, QCheckBox, QLabel)
 
 
@@ -14,12 +15,20 @@ class basicWindow(QWidget):
         self.checkBoxA = QCheckBox("Select This.")
         self.labelA = QLabel("Not slected.")
 
+        self.checkBoxA.stateChanged.connect(self.checkBoxChangedAction)
+
         layout.addWidget(self.checkBoxA)
         layout.addWidget(self.labelA)
 
         self.setGeometry(200, 200, 300, 200)
 
         self.setWindowTitle('CheckBox Example')
+
+    def checkBoxChangedAction(self, state):
+        if QtCore.Qt.Checked == state:
+            self.labelA.setText("Selected.")
+        else:
+            self.labelA.setText("Not Selected.")
 
 
 if __name__ == "__main__":
