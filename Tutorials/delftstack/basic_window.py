@@ -1,22 +1,25 @@
 import sys
 
-from PySide2.QtWidgets import (QWidget, QGridLayout, QPushButton, QApplication)
+from PySide2.QtWidgets import (QWidget, QApplication, QHBoxLayout, QCheckBox, QLabel)
 
 
 class basicWindow(QWidget):
 
     def __init__(self):
         super().__init__()
-        grid_layout = QGridLayout()
-        self.setLayout(grid_layout)
 
-        for x in range(3):
-            for y in range(3):
-                button = QPushButton(str(3 * x + y))
-                grid_layout.addWidget(button, x, y)
-            grid_layout.setColumnStretch(x, x + 1)
+        layout = QHBoxLayout()
+        self.setLayout(layout)
 
-        self.setWindowTitle('Basic Grid Layout')
+        self.checkBoxA = QCheckBox("Select This.")
+        self.labelA = QLabel("Not slected.")
+
+        layout.addWidget(self.checkBoxA)
+        layout.addWidget(self.labelA)
+
+        self.setGeometry(200, 200, 300, 200)
+
+        self.setWindowTitle('CheckBox Example')
 
 
 if __name__ == "__main__":
