@@ -1,46 +1,40 @@
 import sys
 
-from PySide2.QtGui import QIcon, Qt
-from PySide2.QtWidgets import (QApplication, QAction, qApp, QMainWindow, QLabel)
+from PySide2.QtWidgets import (QApplication, QLabel, QWidget, QRadioButton, QVBoxLayout)
 
 
-class basicWindow(QMainWindow):
+class basicWindow(QWidget):
 
     def __init__(self):
         super().__init__()
+        self.label = QLabel('Which city do you live in?')
+        self.rbtn1 = QRadioButton('New York')
+        self.rbtn2 = QRadioButton('Houston')
+        self.label2 = QLabel("")
 
-        self.label = QLabel("The toggle state is ")
-        self.label.setAlignment(Qt.AlignCenter)
+        self.rbtn1.toggled.connect(self.onClicked)
+        self.rbtn2.toggled.connect(self.onClicked)
 
-        self.setCentralWidget(self.label)
+        layout = QVBoxLayout()
+        layout.addWidget(self.label)
+        layout.addWidget(self.rbtn1)
+        layout.addWidget(self.rbtn2)
+        layout.addWidget(self.label2)
 
-        toggleAction = QAction('&Toggle Label', self, checkable=True)
-        toggleAction.setStatusTip('Toggle the label')
-        toggleAction.triggered.connect(self.toggleLabel)
+        self.setGeometry(200, 200, 300, 150)
 
-        exitAction = QAction(QIcon('exit.png'),
-                             '&Exit', self)
-        exitAction.setShortcut('Ctrl+Q')
-        exitAction.setStatusTip('Exit application')
-        exitAction.triggered.connect(qApp.quit)
+        self.setLayout(layout)
+        self.setWindowTitle('Radio Button Example')
 
-        self.statusBar()
+        self.show()
 
-        menubar = self.menuBar()
-        fileMenu = menubar.addMenu('&File')
-        fileMenu.addAction(toggleAction)
-        fileMenu.addAction(exitAction)
-
-        self.setGeometry(200, 200, 300, 200)
-
-        self.setWindowTitle('Menu Bar Example')
-
-    def toggleLabel(self, state):
-        self.label.setText("The toggle state is {}".format(state))
+    def onClicked(self):
+        radioBtn = self.sender()
+        if radioBtn.isChecked():
+            self.label2.setText("You live in " + radioBtn.text())
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     windowExample = basicWindow()
-    windowExample.show()
     sys.exit(app.exec_())
