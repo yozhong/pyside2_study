@@ -1,34 +1,27 @@
 import sys
 
-from PySide2 import QtCore
-from PySide2.QtWidgets import (QWidget, QApplication, QHBoxLayout, QCheckBox, QLabel)
+from PySide2.QtWidgets import (QApplication, QAction, qApp, QMainWindow)
 
 
-class basicWindow(QWidget):
+class basicWindow(QMainWindow):
 
     def __init__(self):
         super().__init__()
 
-        layout = QHBoxLayout()
-        self.setLayout(layout)
+        exitAction = QAction('&Exit', self)
+        exitAction.setShortcut('Ctrl+Q')
+        exitAction.setStatusTip('Exit application')
+        exitAction.triggered.connect(qApp.quit)
 
-        self.checkBoxA = QCheckBox("Select This.")
-        self.labelA = QLabel("Not slected.")
+        self.statusBar()
 
-        self.checkBoxA.stateChanged.connect(self.checkBoxChangedAction)
-
-        layout.addWidget(self.checkBoxA)
-        layout.addWidget(self.labelA)
+        menubar = self.menuBar()
+        fileMenu = menubar.addMenu('&File')
+        fileMenu.addAction(exitAction)
 
         self.setGeometry(200, 200, 300, 200)
 
-        self.setWindowTitle('CheckBox Example')
-
-    def checkBoxChangedAction(self, state):
-        if QtCore.Qt.Checked == state:
-            self.labelA.setText("Selected.")
-        else:
-            self.labelA.setText("Not Selected.")
+        self.setWindowTitle('Menu Bar Example')
 
 
 if __name__ == "__main__":
