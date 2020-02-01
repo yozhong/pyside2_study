@@ -1,6 +1,7 @@
 import sys
 
-from PySide2.QtWidgets import (QApplication, QAction, qApp, QMainWindow, QStyle)
+from PySide2.QtGui import QIcon
+from PySide2.QtWidgets import (QApplication, QAction, qApp, QMainWindow)
 
 
 class basicWindow(QMainWindow):
@@ -8,7 +9,7 @@ class basicWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        exitAction = QAction(self.style().standardIcon(QStyle.SP_DialogCancelButton),
+        exitAction = QAction(QIcon('exit.png'),
                              '&Exit', self)
         exitAction.setShortcut('Ctrl+Q')
         exitAction.setStatusTip('Exit application')
