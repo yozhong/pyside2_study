@@ -1,92 +1,79 @@
 import sys
-import datetime
 
 from PySide2 import QtWidgets as qtw
 from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
 
 
-class Qlabel(object):
-    pass
-
-
 class MainWindow(qtw.QWidget):
     def __init__(self):
         """MainWindow constructor"""
-        super().__init__(windowTitle='Qt Widget demo')
+        super().__init__()
+        self.setWindowTitle('Qt Widget demo')
 
         #########################
         # Create widget objects #
         #########################
 
         # QWidget
-        subwidget = qtw.QWidget(self, toolTip='This is my widget')
-        subwidget.setToolTip('This is YOUR widget')
+        subwidget = qtw.QWidget(self)
+        self.setToolTip('This is my widget')
+        subwidget.setToolTip('This is your widget')
         print(subwidget.toolTip())
 
         # QLabel
-        label = qtw.QLabel('<b>Hello Widgets!</b>', self, margin=10)
+        label = qtw.QLabel(self)
+        label.setText('<b>Hello Widgets!</b>')
+        label.setMargin(10)
 
         # QLineEdit
-        line_edit = qtw.QLineEdit(
-            'default value',
-            self,
-            placeholderText='Type here',
-            clearButtonEnabled=True,
-            maxLength=20
-        )
+        lineedit = qtw.QLineEdit(self)
+        lineedit.setText('default value')
+        lineedit.setPlaceholderText('Type here')
+        lineedit.setClearButtonEnabled(True)
+        lineedit.setMaxLength(20)
 
         # QPushButton
-        button = qtw.QPushButton(
-            'Push Me',
-            self,
-            checkable=True,
-            checked=True,
-            shortcut=qtg.QKeySequence('Ctrl+p')
-        )
+        button = qtw.QPushButton(self)
+        button.setText('Push Me')
+        button.setCheckable(True)
+        button.setChecked(True)
+        button.setShortcut(qtg.QKeySequence('Ctrl+p'))
 
         # QComboBox
-        combobox = qtw.QComboBox(
-            self,
-            editable=True,
-            insertPolicy=qtw.QComboBox.InsertAtTop
-        )
+        combobox = qtw.QComboBox(self)
+        combobox.setEditable(True)
+        combobox.setInsertPolicy(qtw.QComboBox.InsertAtTop)
         combobox.addItem('Lemon', 1)
         combobox.addItem('Peach', 'Ohh I like Peaches!')
         combobox.addItem('Strawberry', qtw.QWidget)
         combobox.insertItem(1, 'Radish', 2)
 
         # QSpiBox
-        spinbox = qtw.QSpinBox(
-            self,
-            value=12,
-            maximum=100,
-            minimum=10,
-            prefix='$',
-            suffix=' + Tax',
-            singleStep=5
-        )
+        spinbox = qtw.QSpinBox(self)
+        spinbox.setValue(12)
+        spinbox.setMaximum(100)
+        spinbox.setMinimum(10)
+        spinbox.setPrefix('$')
+        spinbox.setSuffix(' + Tax')
+        spinbox.setSingleStep(5)
 
         # QDateTimeEdit
-        datetimebox = qtw.QDateTimeEdit(
-            self,
-            date=datetime.date.today(),
-            time=datetime.time(12, 30),
-            calendarPopup=True,
-            maximumDate=datetime.date(2030, 1, 1),
-            minimumTime=datetime.time(8, 0),
-            maximumTime=datetime.time(17, 0),
-            displayFormat='yyyy-MM-dd HH:mm'
-        )
+        datetimebox = qtw.QDateTimeEdit(self)
+        datetimebox.setDate(qtc.QDate.currentDate())
+        datetimebox.setTime(qtc.QTime(12, 30))
+        datetimebox.setCalendarPopup(True)
+        datetimebox.setMaximumDate(qtc.QDate(2030, 1, 1))
+        datetimebox.setMinimumTime(qtc.QTime(8, 0))
+        datetimebox.setMaximumTime(qtc.QTime(17, 0))
+        datetimebox.setDisplayFormat('yyyy-MM-dd HH:mm')
 
         # QTextEdit
-        textedit = qtw.QTextEdit(
-            self,
-            acceptRichText=False,
-            lineWrapMode=qtw.QTextEdit.FixedColumnWidth,
-            lineWrapColumnOrWidth=25,
-            placeholderText='Enter your text here'
-        )
+        textedit = qtw.QTextEdit(self)
+        textedit.setAcceptRichText(False)
+        textedit.setLineWrapMode(qtw.QTextEdit.FixedColumnWidth)
+        textedit.setLineWrapColumnOrWidth(25)
+        textedit.setPlaceholderText('Enter your text here')
 
         self.show()
 
