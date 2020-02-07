@@ -64,7 +64,6 @@ class MainWindow(qtw.QWidget):
         datetimebox.setTime(qtc.QTime(12, 30))
         datetimebox.setCalendarPopup(True)
         datetimebox.setMaximumDate(qtc.QDate(2030, 1, 1))
-        datetimebox.setMinimumTime(qtc.QTime(8, 0))
         datetimebox.setMaximumTime(qtc.QTime(17, 0))
         datetimebox.setDisplayFormat('yyyy-MM-dd HH:mm')
 
@@ -74,6 +73,28 @@ class MainWindow(qtw.QWidget):
         textedit.setLineWrapMode(qtw.QTextEdit.FixedColumnWidth)
         textedit.setLineWrapColumnOrWidth(25)
         textedit.setPlaceholderText('Enter your text here')
+
+        ##################
+        # Layout Objects #
+        ##################
+        layout = qtw.QVBoxLayout()
+        self.setLayout(layout)
+
+        layout.addWidget(label)
+        layout.addWidget(lineedit)
+
+        sublayout = qtw.QHBoxLayout()
+        layout.addLayout(sublayout)
+
+        sublayout.addWidget(button)
+        sublayout.addWidget(combobox)
+
+        gridlayout = qtw.QGridLayout()
+        layout.addLayout(gridlayout)
+
+        gridlayout.addWidget(spinbox, 0, 0)
+        gridlayout.addWidget(datetimebox, 0, 1)
+        gridlayout.addWidget(textedit, 1, 0, 2, 2)
 
         self.show()
 
