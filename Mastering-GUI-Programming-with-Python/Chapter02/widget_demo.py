@@ -88,8 +88,9 @@ class MainWindow(qtw.QWidget):
         sublayout.addWidget(button)
         sublayout.addWidget(combobox)
 
+        container = qtw.QWidget(self)
         gridlayout = qtw.QGridLayout()
-        layout.addLayout(gridlayout)
+        container.setLayout(gridlayout)
 
         gridlayout.addWidget(spinbox, 0, 0)
         gridlayout.addWidget(datetimebox, 0, 1)
@@ -125,6 +126,18 @@ class MainWindow(qtw.QWidget):
 
         stretchlayout.addWidget(qtw.QLineEdit('Short'), 1)
         stretchlayout.addWidget(qtw.QLineEdit('Long'), 2)
+
+        #############################
+        # Container Widgets         #
+        #############################
+        tabwidget = qtw.QTabWidget()
+        tabwidget.setMovable(True)
+        tabwidget.setTabPosition(qtw.QTabWidget.West)
+        tabwidget.setTabShape(qtw.QTabWidget.Triangular)
+        layout.addWidget(tabwidget)
+
+        tabwidget.addTab(container, 'Tab the first')
+        tabwidget.addTab(subwidget, 'Tab the second')
 
         self.show()
 
