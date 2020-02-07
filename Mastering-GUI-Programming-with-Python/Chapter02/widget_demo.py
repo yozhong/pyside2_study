@@ -96,6 +96,13 @@ class MainWindow(qtw.QWidget):
         gridlayout.addWidget(datetimebox, 0, 1)
         gridlayout.addWidget(textedit, 1, 0, 2, 2)
 
+        formlayout = qtw.QFormLayout()
+        layout.addLayout(formlayout)
+
+        formlayout.addRow('Item 1', qtw.QLineEdit(self))
+        formlayout.addRow('Item 2', qtw.QLineEdit(self))
+        formlayout.addRow(qtw.QLabel('<b>This is a label-only row</b>'))
+
         self.show()
 
 
