@@ -14,7 +14,6 @@ class MainWindow(qtw.QWidget):
         #########################
         # Create widget objects #
         #########################
-
         # QWidget
         subwidget = qtw.QWidget(self)
         self.setToolTip('This is my widget')
@@ -102,6 +101,30 @@ class MainWindow(qtw.QWidget):
         formlayout.addRow('Item 1', qtw.QLineEdit(self))
         formlayout.addRow('Item 2', qtw.QLineEdit(self))
         formlayout.addRow(qtw.QLabel('<b>This is a label-only row</b>'))
+
+        ################
+        # Size Control #
+        ################
+        # Fix at 150 pixels wide by 40 pixels high
+        label.setFixedSize(150, 40)
+
+        # Setting minimum and maximum size
+        lineedit.setMinimumSize(150, 15)
+        lineedit.setMaximumSize(500, 50)
+
+        # set the spinbox to a fixed width
+        spinbox.setSizePolicy(qtw.QSizePolicy.Fixed, qtw.QSizePolicy.Preferred)
+
+        # set the textedit to expand
+        textedit.setSizePolicy(qtw.QSizePolicy.MinimumExpanding, qtw.QSizePolicy.MinimumExpanding)
+        textedit.sizeHint = lambda: qtc.QSize(500, 500)
+
+        # use stretch factor
+        stretchlayout = qtw.QHBoxLayout()
+        layout.addLayout(stretchlayout)
+
+        stretchlayout.addWidget(qtw.QLineEdit('Short'), 1)
+        stretchlayout.addWidget(qtw.QLineEdit('Long'), 2)
 
         self.show()
 
