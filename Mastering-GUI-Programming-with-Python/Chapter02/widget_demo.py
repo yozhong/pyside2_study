@@ -10,15 +10,15 @@ class MainWindow(qtw.QWidget):
         """MainWindow constructor"""
         super().__init__()
         self.setWindowTitle('Qt Widget demo')
+        self.setToolTip('This is my widget')
 
         #########################
         # Create widget objects #
         #########################
         # QWidget
-        subwidget = qtw.QWidget(self)
-        self.setToolTip('This is my widget')
-        subwidget.setToolTip('This is your widget')
-        print(subwidget.toolTip())
+        sub_widget = qtw.QWidget(self)
+        sub_widget.setToolTip('This is your widget')
+        print(sub_widget.toolTip())
 
         # QLabel
         label = qtw.QLabel(self)
@@ -26,11 +26,11 @@ class MainWindow(qtw.QWidget):
         label.setMargin(10)
 
         # QLineEdit
-        lineedit = qtw.QLineEdit(self)
-        lineedit.setText('default value')
-        lineedit.setPlaceholderText('Type here')
-        lineedit.setClearButtonEnabled(True)
-        lineedit.setMaxLength(20)
+        line_edit = qtw.QLineEdit(self)
+        line_edit.setText('default value')
+        line_edit.setPlaceholderText('Type here')
+        line_edit.setClearButtonEnabled(True)
+        line_edit.setMaxLength(20)
 
         # QPushButton
         button = qtw.QPushButton(self)
@@ -58,20 +58,20 @@ class MainWindow(qtw.QWidget):
         spinbox.setSingleStep(5)
 
         # QDateTimeEdit
-        datetimebox = qtw.QDateTimeEdit(self)
-        datetimebox.setDate(qtc.QDate.currentDate())
-        datetimebox.setTime(qtc.QTime(12, 30))
-        datetimebox.setCalendarPopup(True)
-        datetimebox.setMaximumDate(qtc.QDate(2030, 1, 1))
-        datetimebox.setMaximumTime(qtc.QTime(17, 0))
-        datetimebox.setDisplayFormat('yyyy-MM-dd HH:mm')
+        datetime_box = qtw.QDateTimeEdit(self)
+        datetime_box.setDate(qtc.QDate.currentDate())
+        datetime_box.setTime(qtc.QTime(12, 30))
+        datetime_box.setCalendarPopup(True)
+        datetime_box.setMaximumDate(qtc.QDate(2030, 1, 1))
+        datetime_box.setMaximumTime(qtc.QTime(17, 0))
+        datetime_box.setDisplayFormat('yyyy-MM-dd HH:mm')
 
         # QTextEdit
-        textedit = qtw.QTextEdit(self)
-        textedit.setAcceptRichText(False)
-        textedit.setLineWrapMode(qtw.QTextEdit.FixedColumnWidth)
-        textedit.setLineWrapColumnOrWidth(25)
-        textedit.setPlaceholderText('Enter your text here')
+        text_edit = qtw.QTextEdit(self)
+        text_edit.setAcceptRichText(False)
+        text_edit.setLineWrapMode(qtw.QTextEdit.FixedColumnWidth)
+        text_edit.setLineWrapColumnOrWidth(25)
+        text_edit.setPlaceholderText('Enter your text here')
 
         ##################
         # Layout Objects #
@@ -80,28 +80,28 @@ class MainWindow(qtw.QWidget):
         self.setLayout(layout)
 
         layout.addWidget(label)
-        layout.addWidget(lineedit)
+        layout.addWidget(line_edit)
 
-        sublayout = qtw.QHBoxLayout()
-        layout.addLayout(sublayout)
+        sub_layout = qtw.QHBoxLayout()
+        layout.addLayout(sub_layout)
 
-        sublayout.addWidget(button)
-        sublayout.addWidget(combobox)
+        sub_layout.addWidget(button)
+        sub_layout.addWidget(combobox)
 
         container = qtw.QWidget(self)
-        gridlayout = qtw.QGridLayout()
-        container.setLayout(gridlayout)
+        grid_layout = qtw.QGridLayout()
+        container.setLayout(grid_layout)
 
-        gridlayout.addWidget(spinbox, 0, 0)
-        gridlayout.addWidget(datetimebox, 0, 1)
-        gridlayout.addWidget(textedit, 1, 0, 2, 2)
+        grid_layout.addWidget(spinbox, 0, 0)
+        grid_layout.addWidget(datetime_box, 0, 1)
+        grid_layout.addWidget(text_edit, 1, 0, 2, 2)
 
-        formlayout = qtw.QFormLayout()
-        layout.addLayout(formlayout)
+        form_layout = qtw.QFormLayout()
+        layout.addLayout(form_layout)
 
-        formlayout.addRow('Item 1', qtw.QLineEdit(self))
-        formlayout.addRow('Item 2', qtw.QLineEdit(self))
-        formlayout.addRow(qtw.QLabel('<b>This is a label-only row</b>'))
+        form_layout.addRow('Item 1', qtw.QLineEdit(self))
+        form_layout.addRow('Item 2', qtw.QLineEdit(self))
+        form_layout.addRow(qtw.QLabel('<b>This is a label-only row</b>'))
 
         ################
         # Size Control #
@@ -110,34 +110,45 @@ class MainWindow(qtw.QWidget):
         label.setFixedSize(150, 40)
 
         # Setting minimum and maximum size
-        lineedit.setMinimumSize(150, 15)
-        lineedit.setMaximumSize(500, 50)
+        line_edit.setMinimumSize(150, 15)
+        line_edit.setMaximumSize(500, 50)
 
         # set the spinbox to a fixed width
         spinbox.setSizePolicy(qtw.QSizePolicy.Fixed, qtw.QSizePolicy.Preferred)
 
-        # set the textedit to expand
-        textedit.setSizePolicy(qtw.QSizePolicy.MinimumExpanding, qtw.QSizePolicy.MinimumExpanding)
-        textedit.sizeHint = lambda: qtc.QSize(500, 500)
+        # set the text edit to expand
+        text_edit.setSizePolicy(qtw.QSizePolicy.MinimumExpanding, qtw.QSizePolicy.MinimumExpanding)
+        text_edit.sizeHint = lambda: qtc.QSize(500, 500)
 
         # use stretch factor
-        stretchlayout = qtw.QHBoxLayout()
-        layout.addLayout(stretchlayout)
+        stretch_layout = qtw.QHBoxLayout()
+        layout.addLayout(stretch_layout)
 
-        stretchlayout.addWidget(qtw.QLineEdit('Short'), 1)
-        stretchlayout.addWidget(qtw.QLineEdit('Long'), 2)
+        stretch_layout.addWidget(qtw.QLineEdit('Short'), 1)
+        stretch_layout.addWidget(qtw.QLineEdit('Long'), 2)
 
         #############################
         # Container Widgets         #
         #############################
-        tabwidget = qtw.QTabWidget()
-        tabwidget.setMovable(True)
-        tabwidget.setTabPosition(qtw.QTabWidget.West)
-        tabwidget.setTabShape(qtw.QTabWidget.Triangular)
-        layout.addWidget(tabwidget)
+        tab_widget = qtw.QTabWidget()
+        tab_widget.setMovable(True)
+        tab_widget.setTabPosition(qtw.QTabWidget.West)
+        tab_widget.setTabShape(qtw.QTabWidget.Triangular)
+        layout.addWidget(tab_widget)
 
-        tabwidget.addTab(container, 'Tab the first')
-        tabwidget.addTab(subwidget, 'Tab the second')
+        tab_widget.addTab(container, 'Tab the first')
+        tab_widget.addTab(sub_widget, 'Tab the second')
+
+        group_box = qtw.QGroupBox('Buttons')
+        group_box.setCheckable(True)
+        group_box.setChecked(True)
+        group_box.setAlignment(qtc.Qt.AlignHCenter)
+        group_box.setFlat(True)
+
+        group_box.setLayout(qtw.QHBoxLayout())
+        group_box.layout().addWidget(qtw.QPushButton('OK'))
+        group_box.layout().addWidget(qtw.QPushButton('Cancel'))
+        layout.addWidget(group_box)
 
         self.show()
 
