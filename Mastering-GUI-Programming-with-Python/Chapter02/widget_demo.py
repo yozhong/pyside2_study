@@ -5,19 +5,48 @@ from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
 
 
+class ChoiceSpinBox(qtw.QSpinBox):
+    """A spinbox for selecting choices."""
+
+    def __init__(self, choices, *args, **kwargs):
+        self.choices = choices
+        super().__init__(*args, **kwargs)
+        super().setMaximum(len(self.choices) - 1)
+        super().setMinimum(0)
+
+    def valueFromText(self, text):
+        return self.choices.index(text)
+
+    def textFromValue(self, value):
+        try:
+            return self.choices[value]
+        except IndexError:
+            return '!Error!'
+
+    def validate(self, string, index):
+        if string in self.choices:
+            state = qtg.QValidator.Acceptable
+        elif any([v.startswith(string) for v in self.choices]):
+            state = qtg.QValidator.Intermediate
+        else:
+            state = qtg.QValidator.Invalid
+        return state, string, index
+
+
 class IPv4Validator(qtg.QValidator):
     """Enforce entry of IPv4 address"""
+
     def validate(self, string, index):
-        octects = string.split('.')
-        if len(octects) > 4:
+        octets = string.split('.')
+        if len(octets) > 4:
             state = qtg.QValidator.Invalid
-        elif not all([x.isdigit() for x in octects if x != '']):
+        elif not all([x.isdigit() for x in octets if x != '']):
             state = qtg.QValidator.Invalid
-        elif not all([0 <= int(x) <= 255 for x in octects if x != '']):
+        elif not all([0 <= int(x) <= 255 for x in octets if x != '']):
             state = qtg.QValidator.Invalid
-        elif len(octects) < 4:
+        elif len(octets) < 4:
             state = qtg.QValidator.Intermediate
-        elif any([x == '' for x in octects]):
+        elif any([x == '' for x in octets]):
             state = qtg.QValidator.Intermediate
         else:
             state = qtg.QValidator.Acceptable
@@ -174,6 +203,9 @@ class MainWindow(qtw.QWidget):
         ##############
         line_edit.setText('0.0.0.0')
         line_edit.setValidator(IPv4Validator())
+
+        rating_box = ChoiceSpinBox(['bad', 'average', 'good', 'awesome'], self)
+        sub_layout.addWidget(rating_box)
 
         self.show()
 
