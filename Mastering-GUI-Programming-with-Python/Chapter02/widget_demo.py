@@ -5,6 +5,25 @@ from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
 
 
+class IPv4Validator(qtg.QValidator):
+    """Enforce entry of IPv4 address"""
+    def validate(self, string, index):
+        octects = string.split('.')
+        if len(octects) > 4:
+            state = qtg.QValidator.Invalid
+        elif not all([x.isdigit() for x in octects if x != '']):
+            state = qtg.QValidator.Invalid
+        elif not all([0 <= int(x) <= 255 for x in octects if x != '']):
+            state = qtg.QValidator.Invalid
+        elif len(octects) < 4:
+            state = qtg.QValidator.Intermediate
+        elif any([x == '' for x in octects]):
+            state = qtg.QValidator.Intermediate
+        else:
+            state = qtg.QValidator.Acceptable
+        return state, string, index
+
+
 class MainWindow(qtw.QWidget):
     def __init__(self):
         """MainWindow constructor"""
@@ -149,6 +168,12 @@ class MainWindow(qtw.QWidget):
         group_box.layout().addWidget(qtw.QPushButton('OK'))
         group_box.layout().addWidget(qtw.QPushButton('Cancel'))
         layout.addWidget(group_box)
+
+        ##############
+        # Validation #
+        ##############
+        line_edit.setText('0.0.0.0')
+        line_edit.setValidator(IPv4Validator())
 
         self.show()
 
