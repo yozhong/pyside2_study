@@ -5,7 +5,7 @@ from PySide2 import QtCore as qtc
 
 
 class FormWindow(qtw.QWidget):
-    submitted = qtc.Signal(str)
+    submitted = qtc.Signal([str], [int, str])
 
     def __init__(self):
         super().__init__()
@@ -19,7 +19,11 @@ class FormWindow(qtw.QWidget):
         self.layout().addWidget(self.submit)
 
     def onSubmit(self):
-        self.submitted.emit(self.edit.text())
+        if self.edit.text().isdigit():
+            text = self.edit.text()
+            self.submitted[int, str].emit(int(text), text)
+        else:
+            self.submitted[str].emit(self.edit.text())
         self.close()
 
 
@@ -37,9 +41,19 @@ class MainWindow(qtw.QWidget):
 
         self.show()
 
+    @qtc.Slot(str)
+    def onSubmittedStr(self, string):
+        self.label.setText(string)
+
+    @qtc.Slot(int, str)
+    def onSubmittedIntStr(self, integer, string):
+        text = f'The string {string} become the number {integer}'
+        self.label.setText(text)
+
     def onChange(self):
         self.formwindow = FormWindow()
-        self.formwindow.submitted.connect(self.label.setText)
+        self.formwindow.submitted[str].connect(self.onSubmittedStr)
+        self.formwindow.submitted[int, str].connect(self.onSubmittedIntStr)
         self.formwindow.show()
 
 
