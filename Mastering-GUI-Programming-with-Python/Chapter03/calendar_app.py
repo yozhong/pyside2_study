@@ -59,6 +59,7 @@ class MainWindow(qtw.QWidget):
         self.allday_check.toggled.connect(self.event_time.setDisabled)
         self.calendar.selectionChanged.connect(self.populate_list)
         self.event_list.itemSelectionChanged.connect(self.populate_form)
+        self.add_button.clicked.connect(self.save_event)
 
         self.show()
 
@@ -97,6 +98,30 @@ class MainWindow(qtw.QWidget):
             self.event_time.setTime(event_data['time'])
         self.event_title.setText(event_data['title'])
         self.event_detail.setPlainText(event_data['detail'])
+
+    def save_event(self):
+        event = {
+            'category': self.event_category.currentText(),
+            'time': (
+                None
+                if self.allday_check.isChecked()
+                else self.event_time.time()
+            ),
+            'title': self.event_title.text(),
+            'detail': self.event_detail.toPlainText()
+        }
+        date = self.calendar.selectedDate()
+        event_list = self.events.get(date, [])
+        event_number = self.event_list.currentRow()
+
+        if event_number == -1:
+            event_list.append(event)
+        else:
+            event_list[event_number] = event
+
+        event_list.sort(key=lambda x: x['time'] or qtc.QTime(0, 0))
+        self.events[date] = event_list
+        self.populate_list()
 
 
 if __name__ == '__main__':
