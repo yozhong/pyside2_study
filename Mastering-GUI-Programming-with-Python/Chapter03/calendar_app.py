@@ -56,12 +56,17 @@ class MainWindow(qtw.QWidget):
         event_form_layout.addWidget(self.add_button, 4, 2)
         event_form_layout.addWidget(self.del_button, 4, 3)
 
+        ##################
+        # Connect Events #
+        ##################
         self.allday_check.toggled.connect(self.event_time.setDisabled)
         self.calendar.selectionChanged.connect(self.populate_list)
         self.event_list.itemSelectionChanged.connect(self.populate_form)
         self.add_button.clicked.connect(self.save_event)
         self.del_button.clicked.connect(self.delete_event)
+        self.event_list.itemSelectionChanged.connect(self.check_delete_btn)
 
+        self.check_delete_btn()
         self.show()
 
     def clear_form(self):
@@ -131,6 +136,9 @@ class MainWindow(qtw.QWidget):
         self.event_list.setCurrentRow(-1)
         self.clear_form()
         self.populate_list()
+
+    def check_delete_btn(self):
+        self.del_button.setDisabled(self.event_list.currentRow() == -1)
 
 
 if __name__ == '__main__':
