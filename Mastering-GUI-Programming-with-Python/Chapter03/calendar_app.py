@@ -60,6 +60,7 @@ class MainWindow(qtw.QWidget):
         self.calendar.selectionChanged.connect(self.populate_list)
         self.event_list.itemSelectionChanged.connect(self.populate_form)
         self.add_button.clicked.connect(self.save_event)
+        self.del_button.clicked.connect(self.delete_event)
 
         self.show()
 
@@ -121,6 +122,14 @@ class MainWindow(qtw.QWidget):
 
         event_list.sort(key=lambda x: x['time'] or qtc.QTime(0, 0))
         self.events[date] = event_list
+        self.populate_list()
+
+    def delete_event(self):
+        date = self.calendar.selectedDate()
+        row = self.event_list.currentRow()
+        del(self.events[date][row])
+        self.event_list.setCurrentRow(-1)
+        self.clear_form()
         self.populate_list()
 
 
