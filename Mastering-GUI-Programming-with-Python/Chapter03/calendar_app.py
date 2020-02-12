@@ -58,6 +58,8 @@ class MainWindow(qtw.QWidget):
 
         self.allday_check.toggled.connect(self.event_time.setDisabled)
         self.calendar.selectionChanged.connect(self.populate_list)
+        self.event_list.itemSelectionChanged.connect(self.populate_form)
+
         self.show()
 
     def clear_form(self):
@@ -78,6 +80,23 @@ class MainWindow(qtw.QWidget):
                 else 'All Day'
             )
             self.event_list.addItem(f"{time}: {event['title']}")
+
+    def populate_form(self):
+        self.clear_form()
+        date = self.calendar.selectedDate()
+        event_number = self.event_list.currentRow()
+        if event_number == -1:
+            return
+
+        event_data = self.events.get(date)[event_number]
+
+        self.event_category.setCurrentText(event_data['category'])
+        if event_data['time'] is None:
+            self.allday_check.setChecked(True)
+        else:
+            self.event_time.setTime(event_data['time'])
+        self.event_title.setText(event_data['title'])
+        self.event_detail.setPlainText(event_data['detail'])
 
 
 if __name__ == '__main__':
