@@ -5,6 +5,8 @@ from PySide2 import QtCore as qtc
 
 
 class MainWindow(qtw.QWidget):
+    events = {}
+
     def __init__(self):
         """MainWindow constructor"""
         super().__init__()
@@ -54,7 +56,28 @@ class MainWindow(qtw.QWidget):
         event_form_layout.addWidget(self.add_button, 4, 2)
         event_form_layout.addWidget(self.del_button, 4, 3)
 
+        self.allday_check.toggled.connect(self.event_time.setDisabled)
+        self.calendar.selectionChanged.connect(self.populate_list)
         self.show()
+
+    def clear_form(self):
+        self.event_title.clear()
+        self.event_category.setCurrentIndex(0)
+        self.event_time.setTime(qtc.QTime(8, 0))
+        self.allday_check.setChecked(False)
+        self.event_detail.setPlainText('')
+
+    def populate_list(self):
+        self.event_list.clear()
+        self.clear_form()
+        date = self.calendar.selectedDate()
+        for event in self.events.get(date, []):
+            time = (
+                event['time'].toString('hh:mm')
+                if event['time']
+                else 'All Day'
+            )
+            self.event_list.addItem(f"{time}: {event['title']}")
 
 
 if __name__ == '__main__':
