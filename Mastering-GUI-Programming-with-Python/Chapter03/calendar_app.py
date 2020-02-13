@@ -19,7 +19,7 @@ class CategoryWindow(qtw.QWidget):
         self.layout().addWidget(self.submit_btn)
         self.cancel_btn = qtw.QPushButton('Cancel')
         self.cancel_btn.clicked.connect(self.close)
-        self.layout().addWidget(self.submit_btn)
+        self.layout().addWidget(self.cancel_btn)
         self.show()
 
     @qtc.Slot()
