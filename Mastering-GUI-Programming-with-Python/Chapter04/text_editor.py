@@ -8,9 +8,8 @@ class MainWindow(qtw.QMainWindow):
     def __init__(self):
         """MainWindow constructor"""
         super().__init__()
-        # Main UI code goes here
-
-        # End main UI code
+        self.text_edit = qtw.QTextEdit()
+        self.setCentralWidget(self.text_edit)
         self.show()
 
 
