@@ -14,7 +14,9 @@ class MainWindow(qtw.QMainWindow):
 
         char_count = qtw.QLabel('chars: 0')
         self.text_edit.textChanged.connect(
-            'chars: ' + str(len(self.text_edit.toPlainText()))
+            lambda: char_count.setText(
+                'chars: ' + str(len(self.text_edit.toPlainText()))
+            )
         )
         self.statusBar().addPermanentWidget(char_count)
         self.show()
