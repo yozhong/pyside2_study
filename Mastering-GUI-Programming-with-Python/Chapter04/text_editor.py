@@ -10,8 +10,8 @@ class MainWindow(qtw.QMainWindow):
         super().__init__()
         self.text_edit = qtw.QTextEdit()
         self.setCentralWidget(self.text_edit)
-        self.statusBar().showMessage('Welcome to text_editor.py')
 
+        self.statusBar().showMessage('Welcome to text_editor.py')
         char_count = qtw.QLabel('chars: 0')
         self.text_edit.textChanged.connect(
             lambda: char_count.setText(
@@ -19,6 +19,19 @@ class MainWindow(qtw.QMainWindow):
             )
         )
         self.statusBar().addPermanentWidget(char_count)
+
+        menu_bar = self.menuBar()
+        file_menu = menu_bar.addMenu('File')
+        edit_menu = menu_bar.addMenu('Edit')
+        help_menu = menu_bar.addMenu('Help')
+        open_action = file_menu.addAction('Open')
+        save_action = file_menu.addAction('Save')
+        quit_action = file_menu.addAction('Quit', self.destroy)
+        edit_menu.addAction('Undo', self.text_edit.undo)
+        redo_action = qtw.QAction('Redo', self)
+        redo_action.triggered.connect(self.text_edit.redo)
+        edit_menu.addAction(redo_action)
+
         self.show()
 
 
