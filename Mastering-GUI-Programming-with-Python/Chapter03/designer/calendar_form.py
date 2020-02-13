@@ -9,7 +9,7 @@
 ################################################################################
 
 from PySide2.QtCore import (QCoreApplication, QMetaObject, QObject, QPoint,
-    QRect, QSize, QUrl, Qt)
+                            QRect, QSize, QUrl, Qt, QTime)
 from PySide2.QtGui import (QBrush, QColor, QConicalGradient, QFont,
     QFontDatabase, QIcon, QLinearGradient, QPalette, QPainter, QPixmap,
     QRadialGradient)
@@ -41,10 +41,10 @@ class Ui_MainWindow(object):
 
         self.verticalLayout.addWidget(self.label)
 
-        self.listWidget = QListWidget(self.centralwidget)
-        self.listWidget.setObjectName(u"listWidget")
+        self.event_list = QListWidget(self.centralwidget)
+        self.event_list.setObjectName(u"event_list")
 
-        self.verticalLayout.addWidget(self.listWidget)
+        self.verticalLayout.addWidget(self.event_list)
 
         self.groupBox = QGroupBox(self.centralwidget)
         self.groupBox.setObjectName(u"groupBox")
@@ -52,6 +52,7 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.event_time = QTimeEdit(self.groupBox)
         self.event_time.setObjectName(u"event_time")
+        self.event_time.setTime(QTime(8, 0, 0))
 
         self.gridLayout.addWidget(self.event_time, 2, 1, 1, 1)
 
@@ -66,11 +67,11 @@ class Ui_MainWindow(object):
         self.gridLayout.addWidget(self.allday_check, 2, 2, 1, 1)
 
         self.event_category = QComboBox(self.groupBox)
-        self.event_category.addItem(QString())
-        self.event_category.addItem(QString())
-        self.event_category.addItem(QString())
-        self.event_category.addItem(QString())
-        self.event_category.addItem(QString())
+        self.event_category.addItem(str())
+        self.event_category.addItem(str())
+        self.event_category.addItem(str())
+        self.event_category.addItem(str())
+        self.event_category.addItem(str())
         self.event_category.setObjectName(u"event_category")
 
         self.gridLayout.addWidget(self.event_category, 2, 0, 1, 1)
@@ -99,13 +100,14 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 860, 35))
+        self.menubar.setGeometry(QRect(0, 0, 860, 34))
         MainWindow.setMenuBar(self.menubar)
         self.statusbar = QStatusBar(MainWindow)
         self.statusbar.setObjectName(u"statusbar")
         MainWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(MainWindow)
+        self.allday_check.toggled.connect(self.event_time.setDisabled)
 
         QMetaObject.connectSlotsByName(MainWindow)
     # setupUi
