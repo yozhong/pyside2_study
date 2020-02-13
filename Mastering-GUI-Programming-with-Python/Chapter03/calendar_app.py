@@ -4,6 +4,31 @@ from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
 
 
+class CategoryWindow(qtw.QWidget):
+    submitted = qtc.Signal(str)
+
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("New Category")
+        self.setLayout(qtw.QVBoxLayout())
+        self.layout().addWidget(qtw.QLabel('Please enter a new category name:'))
+        self.category_entry = qtw.QLineEdit()
+        self.layout().addWidget(self.category_entry)
+        self.submit_btn = qtw.QPushButton('Submit')
+        self.submit_btn.clicked.connect(self.onSubmit)
+        self.layout().addWidget(self.submit_btn)
+        self.cancel_btn = qtw.QPushButton('Cancel')
+        self.cancel_btn.clicked.connect(self.close)
+        self.layout().addWidget(self.submit_btn)
+        self.show()
+
+    @qtc.Slot()
+    def onSubmit(self):
+        if self.category_entry.text():
+            self.submitted.emit(self.category_entry.text())
+        self.close()
+
+
 class MainWindow(qtw.QWidget):
     events = {}
 
@@ -65,6 +90,7 @@ class MainWindow(qtw.QWidget):
         self.add_button.clicked.connect(self.save_event)
         self.del_button.clicked.connect(self.delete_event)
         self.event_list.itemSelectionChanged.connect(self.check_delete_btn)
+        self.event_category.currentTextChanged.connect(self.on_category_change)
 
         self.check_delete_btn()
         self.show()
@@ -139,6 +165,16 @@ class MainWindow(qtw.QWidget):
 
     def check_delete_btn(self):
         self.del_button.setDisabled(self.event_list.currentRow() == -1)
+
+    def add_category(self, category):
+        self.event_category.addItem(category)
+        self.event_category.setCurrentText(category)
+
+    def on_category_change(self, text):
+        if text == 'New...':
+            self.dialog = CategoryWindow()
+            self.dialog.submitted.connect(self.add_category)
+            self.event_category.setCurrentIndex(0)
 
 
 if __name__ == '__main__':
