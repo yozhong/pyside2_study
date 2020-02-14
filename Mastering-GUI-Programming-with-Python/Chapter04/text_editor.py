@@ -73,7 +73,39 @@ class MainWindow(qtw.QMainWindow):
         tool_bar2.addAction('Paste', self.text_edit.paste)
         self.addToolBar(qtc.Qt.RightToolBarArea, tool_bar2)
 
+        ################
+        # Dock Widgets #
+        ################
+        dock = qtw.QDockWidget('Replace')
+        self.addDockWidget(qtc.Qt.LeftDockWidgetArea, dock)
+        dock.setFeatures(
+            qtw.QDockWidget.DockWidgetMovable |
+            qtw.QDockWidget.DockWidgetFloatable
+        )
+        replace_widget = qtw.QWidget()
+        replace_widget.setLayout(qtw.QVBoxLayout())
+        dock.setWidget(replace_widget)
+
+        self.search_text_inp = qtw.QLineEdit(placeholderText='search')
+        self.replace_text_inp = qtw.QLineEdit(placeholderText='replace')
+        search_and_replace_btn = qtw.QPushButton('Search and Replace')
+        search_and_replace_btn.clicked.connect(self.search_and_replace)
+
+        replace_widget.layout().addWidget(self.search_text_inp)
+        replace_widget.layout().addWidget(self.replace_text_inp)
+        replace_widget.layout().addWidget(search_and_replace_btn)
+        replace_widget.layout().addStretch()
+
         self.show()
+
+    def search_and_replace(self):
+        s_text = self.search_text_inp.text()
+        r_text = self.replace_text_inp.text()
+
+        if s_text:
+            self.text_edit.setText(
+                self.text_edit.toPlainText().replace(s_text, r_text)
+            )
 
 
 if __name__ == '__main__':
