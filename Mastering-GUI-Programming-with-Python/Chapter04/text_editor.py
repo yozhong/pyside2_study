@@ -96,6 +96,43 @@ class MainWindow(qtw.QMainWindow):
         replace_widget.layout().addWidget(search_and_replace_btn)
         replace_widget.layout().addStretch()
 
+        ############################
+        # Messageboxes and Dialogs #
+        ############################
+        help_menu.addAction('About', self.showAboutDialog)
+
+        response = qtw.QMessageBox.question(
+            self,
+            'My Text Editor',
+            'This is beta software, do you want to continue?',
+            qtw.QMessageBox.Yes | qtw.QMessageBox.Abort
+        )
+        if response == qtw.QMessageBox.Abort:
+            self.close()
+            sys.exit()
+
+        # custom message box
+
+        splash_screen = qtw.QMessageBox()
+        splash_screen.setWindowTitle('My Text Editor')
+        splash_screen.setText('BETA SOFTWARE WARNING!')
+        splash_screen.setInformativeText(
+            'This is very, very beta, '
+            'are you really sure you want to use it?'
+        )
+        splash_screen.setDetailedText(
+            'This editor was written for pedagogical '
+            'purposes, and probably is not fit for real work.'
+        )
+        splash_screen.setWindowModality(qtc.Qt.WindowModal)
+        splash_screen.addButton(qtw.QMessageBox.Yes)
+        splash_screen.addButton(qtw.QMessageBox.Abort)
+        response = splash_screen.exec()
+        if response == qtw.QMessageBox.Abort:
+            self.close()
+            sys.exit()
+
+
         self.show()
 
     def search_and_replace(self):
@@ -106,6 +143,9 @@ class MainWindow(qtw.QMainWindow):
             self.text_edit.setText(
                 self.text_edit.toPlainText().replace(s_text, r_text)
             )
+
+    def showAboutDialog(self):
+        qtw.QMessageBox.about(self, 'About text_editor.py', 'This is a text editor written in Pyside2.')
 
 
 if __name__ == '__main__':
