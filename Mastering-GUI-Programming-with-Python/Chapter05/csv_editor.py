@@ -16,6 +16,16 @@ class CsvTableModel(qtc.QAbstractTableModel):
             self._headers = next(csv_reader)
             self._data = list(csv_reader)
 
+    def rowCount(self, parent=None):
+        return len(self._data)
+
+    def columnCount(self, parent=None):
+        return len(self._headers)
+
+    def data(self, index, role=None):
+        if role == qtc.Qt.DisplayRole:
+            return self._data[index.row()][index.column()]
+
 
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
