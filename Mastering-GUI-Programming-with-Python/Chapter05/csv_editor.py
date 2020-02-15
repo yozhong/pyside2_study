@@ -26,6 +26,19 @@ class CsvTableModel(qtc.QAbstractTableModel):
         if role == qtc.Qt.DisplayRole:
             return self._data[index.row()][index.column()]
 
+    def headerData(self, section, orientation, role=None):
+        if orientation == qtc.Qt.Horizontal and role == qtc.Qt.DisplayRole:
+            return self._headers[section]
+        else:
+            return super().headerData(section, orientation, role)
+
+    def sort(self, column, order=None):
+        self.layoutAboutToBeChanged.emit() # needs to be emitted before sort
+        self._data.sort(key=lambda x: x[column])
+        if order == qtc.Qt.DescendingOrder:
+            self._data.reverse()
+        self.layoutChanged.emit() # needs to be emitted after sort
+
 
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
