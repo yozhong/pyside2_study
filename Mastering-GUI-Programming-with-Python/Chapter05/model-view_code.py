@@ -52,9 +52,14 @@ class MainWindow(qtw.QMainWindow):
     def __init__(self):
         """MainWindow constructor"""
         super().__init__()
-        # Main UI code goes here
+        self.view = View()
+        self.setCentralWidget(self.view)
 
-        # End main UI code
+        self.model = Model()
+
+        self.view.submitted.connect(self.model.save)
+        self.model.error.connect(self.view.showError)
+
         self.show()
 
 
