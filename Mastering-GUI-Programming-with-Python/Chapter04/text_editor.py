@@ -132,6 +132,9 @@ class MainWindow(qtw.QMainWindow):
             self.close()
             sys.exit()
 
+        # QFileDialog
+        open_action.triggered.connect(self.openFile)
+        save_action.triggered.connect(self.saveFile)
 
         self.show()
 
@@ -146,6 +149,36 @@ class MainWindow(qtw.QMainWindow):
 
     def showAboutDialog(self):
         qtw.QMessageBox.about(self, 'About text_editor.py', 'This is a text editor written in Pyside2.')
+
+    def openFile(self):
+        filename, _ = qtw.QFileDialog().getOpenFileName(
+            self,
+            'Select a text file to open...',
+            qtc.QDir.homePath(),
+            'Text Files (*.txt) ;;Python Files (*.py) ;;All Files (*)',
+            'Python Files (*.py)',
+            qtw.QFileDialog.DontUseNativeDialog | qtw.QFileDialog.DontResolveSymlinks
+        )
+        if filename:
+            try:
+                with open(filename, 'r') as fh:
+                    self.text_edit.setText(fh.read())
+            except Exception as e:
+                qtw.QMessageBox.critical(f"Could not load file: {e}")
+
+    def saveFile(self):
+        filename, _ = qtw.QFileDialog.getSaveFileName(
+            self,
+            'Select the file to save to...',
+            qtc.QDir.homePath(),
+            'Text Files (*.txt) ;;Python Files (*.py) ;;All Files (*)'
+        )
+        if filename:
+            try:
+                with open(filename, 'w') as fh:
+                    fh.write(self.text_edit.toPlainText())
+            except Exception as e:
+                qtw.QMessageBox.critical(f"Could not save file: {e}")
 
 
 if __name__ == '__main__':
