@@ -1,7 +1,20 @@
+import csv
 import sys
 from PySide2 import QtWidgets as qtw
 from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
+
+
+class CsvTableModel(qtc.QAbstractTableModel):
+    """The model for a CSV table."""
+
+    def __init__(self, csv_file):
+        super().__init__()
+        self.filename = csv_file
+        with open(self.filename) as fh:
+            csv_reader = csv.reader(fh)
+            self._headers = next(csv_reader)
+            self._data = list(csv_reader)
 
 
 class MainWindow(qtw.QMainWindow):
