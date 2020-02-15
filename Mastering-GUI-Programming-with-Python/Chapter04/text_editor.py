@@ -4,7 +4,40 @@ from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
 
 
+class SettingsDialog(qtw.QDialog):
+    """Dialog for setting the settings"""
+
+    def __init__(self, settings, parent=None):
+        super().__init__(parent, modal=True)
+        self.setLayout(qtw.QFormLayout())
+        self.settings = settings
+        self.layout().addRow(qtw.QLabel('<h1>Application Settings</h1>'))
+        self.show_warnings_cb = qtw.QCheckBox(
+            # checked=settings.get('show_warnings')
+            checked=settings.value('show_warnings', type=bool)
+        )
+        self.layout().addRow('Show warnings', self.show_warnings_cb)
+
+        self.accept_btn = qtw.QPushButton('Ok', clicked=self.accept)
+        self.cancel_btn = qtw.QPushButton('Cancel', clicked=self.reject)
+        self.layout().addRow(self.accept_btn, self.cancel_btn)
+
+    def accept(self):
+        # self.settings['show_warnings'] = self.show_warnings_cb.isChecked()
+        self.settings.setValue(
+            'show_warnings',
+            self.show_warnings_cb.isChecked()
+        )
+        print(self.settings.value('show_warnings'))
+        super().accept()
+
+
 class MainWindow(qtw.QMainWindow):
+
+    # settings = {'show_warnings': True}
+    settings = qtc.QSettings('Alan D Moore', 'text editor')
+
+
     def __init__(self):
         """MainWindow constructor"""
         super().__init__()
@@ -101,40 +134,47 @@ class MainWindow(qtw.QMainWindow):
         ############################
         help_menu.addAction('About', self.showAboutDialog)
 
-        response = qtw.QMessageBox.question(
-            self,
-            'My Text Editor',
-            'This is beta software, do you want to continue?',
-            qtw.QMessageBox.Yes | qtw.QMessageBox.Abort
-        )
-        if response == qtw.QMessageBox.Abort:
-            self.close()
-            sys.exit()
+        if self.settings.value('show_warnings', False, type=bool):
+            response = qtw.QMessageBox.question(
+                self,
+                'My Text Editor',
+                'This is beta software, do you want to continue?',
+                qtw.QMessageBox.Yes | qtw.QMessageBox.Abort
+            )
+            if response == qtw.QMessageBox.Abort:
+                self.close()
+                sys.exit()
 
-        # custom message box
+            # custom message box
 
-        splash_screen = qtw.QMessageBox()
-        splash_screen.setWindowTitle('My Text Editor')
-        splash_screen.setText('BETA SOFTWARE WARNING!')
-        splash_screen.setInformativeText(
-            'This is very, very beta, '
-            'are you really sure you want to use it?'
-        )
-        splash_screen.setDetailedText(
-            'This editor was written for pedagogical '
-            'purposes, and probably is not fit for real work.'
-        )
-        splash_screen.setWindowModality(qtc.Qt.WindowModal)
-        splash_screen.addButton(qtw.QMessageBox.Yes)
-        splash_screen.addButton(qtw.QMessageBox.Abort)
-        response = splash_screen.exec()
-        if response == qtw.QMessageBox.Abort:
-            self.close()
-            sys.exit()
+            splash_screen = qtw.QMessageBox()
+            splash_screen.setWindowTitle('My Text Editor')
+            splash_screen.setText('BETA SOFTWARE WARNING!')
+            splash_screen.setInformativeText(
+                'This is very, very beta, '
+                'are you really sure you want to use it?'
+            )
+            splash_screen.setDetailedText(
+                'This editor was written for pedagogical '
+                'purposes, and probably is not fit for real work.'
+            )
+            splash_screen.setWindowModality(qtc.Qt.WindowModal)
+            splash_screen.addButton(qtw.QMessageBox.Yes)
+            splash_screen.addButton(qtw.QMessageBox.Abort)
+            response = splash_screen.exec()
+            if response == qtw.QMessageBox.Abort:
+                self.close()
+                sys.exit()
 
         # QFileDialog
         open_action.triggered.connect(self.openFile)
         save_action.triggered.connect(self.saveFile)
+
+        # QFontDialog
+        edit_menu.addAction('Set Font…', self.set_font)
+
+        # Custom dialog
+        edit_menu.addAction('Settings…', self.show_settings)
 
         self.show()
 
@@ -179,6 +219,20 @@ class MainWindow(qtw.QMainWindow):
                     fh.write(self.text_edit.toPlainText())
             except Exception as e:
                 qtw.QMessageBox.critical(f"Could not save file: {e}")
+
+    def set_font(self):
+        current = self.text_edit.currentFont()
+        accepted, font = qtw.QFontDialog.getFont(
+            current,
+            self,
+            options=(qtw.QFontDialog.DontUseNativeDialog | qtw.QFontDialog.MonospacedFonts)
+        )
+        if accepted:
+            self.text_edit.setCurrentFont(font)
+
+    def show_settings(self):
+        settings_dialog = SettingsDialog(self.settings, self)
+        settings_dialog.exec()
 
 
 if __name__ == '__main__':
