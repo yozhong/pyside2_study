@@ -35,6 +35,27 @@ class MainWindow(qtw.QMainWindow):
         self.reset = qtw.QPushButton('Cancel')
         self.reset.clicked.connect(self.close)
         cx_form.layout().addRow(self.submit, self.reset)
+
+        # Setting a font
+        heading_font = qtg.QFont('Impact', 32 , qtg.QFont.Bold)
+        heading_font.setStretch(qtg.QFont.ExtraExpanded)
+        heading.setFont(heading_font)
+
+        label_font = qtg.QFont()
+        label_font.setFamily('Impact')
+        label_font.setPointSize(14)
+        label_font.setWeight(qtg.QFont.DemiBold)
+        label_font.setStyle(qtg.QFont.StyleItalic)
+
+        for inp in inputs.values():
+            cx_form.layout().labelForField(inp).setFont(label_font)
+
+        # Dealing with miss fonts
+        button_font = qtg.QFont('Totally Nonexistant Font Family XYZ', 15.233)
+        print(f'Font is {button_font.family()}')
+        actual_font = qtg.QFontInfo(button_font).family()
+        print(f'Actual font used is {actual_font}')
+
         self.show()
 
 
