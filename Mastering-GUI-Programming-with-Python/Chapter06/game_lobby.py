@@ -82,6 +82,17 @@ class MainWindow(qtw.QMainWindow):
         go_pixmap.fill(qtg.QColor('green'))
         stop_pixmap.fill(qtg.QColor('red'))
 
+        # Create icon
+        connect_icon = qtg.QIcon()
+        connect_icon.addPixmap(go_pixmap, qtg.QIcon.Active)
+        connect_icon.addPixmap(stop_pixmap, qtg.QIcon.Disabled)
+
+        self.submit.setIcon(connect_icon)
+        self.submit.setDisabled(True)
+        inputs['Server'].textChanged.connect(
+            lambda x: self.submit.setDisabled(x == '')
+        )
+
         self.show()
 
 
