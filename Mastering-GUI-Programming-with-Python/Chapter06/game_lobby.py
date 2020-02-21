@@ -36,6 +36,9 @@ class MainWindow(qtw.QMainWindow):
         self.reset.clicked.connect(self.close)
         cx_form.layout().addRow(self.submit, self.reset)
 
+        #########
+        # Fonts #
+        #########
         # Setting a font
         heading_font = qtg.QFont('Impact', 32 , qtg.QFont.Bold)
         heading_font.setStretch(qtg.QFont.ExtraExpanded)
@@ -63,6 +66,21 @@ class MainWindow(qtw.QMainWindow):
               f' {actual_font.pointSize()}')
         self.submit.setFont(button_font)
         self.reset.setFont(button_font)
+
+        ####################
+        # Images and Icons #
+        ####################
+        # Add image
+        logo = qtg.QPixmap('logo.png')
+        heading.setPixmap(logo)
+        if logo.width() > 400:
+            logo = logo.scaledToWidth(400, qtc.Qt.SmoothTransformation)
+
+        # Create images
+        go_pixmap = qtg.QPixmap(qtc.QSize(32, 32))
+        stop_pixmap = qtg.QPixmap(qtc.QSize(32, 32))
+        go_pixmap.fill(qtg.QColor('green'))
+        stop_pixmap.fill(qtg.QColor('red'))
 
         self.show()
 
