@@ -56,6 +56,14 @@ class MainWindow(qtw.QMainWindow):
         actual_font = qtg.QFontInfo(button_font).family()
         print(f'Actual font used is {actual_font}')
 
+        button_font.setStyleHint(qtg.QFont.Fantasy)
+        button_font.setStyleStrategy(qtg.QFont.PreferAntialias)
+        actual_font = qtg.QFontInfo(button_font)
+        print(f'Actual font used is {actual_font.family()}'
+              f' {actual_font.pointSize()}')
+        self.submit.setFont(button_font)
+        self.reset.setFont(button_font)
+
         self.show()
 
 
