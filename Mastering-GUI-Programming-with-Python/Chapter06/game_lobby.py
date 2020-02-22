@@ -100,6 +100,13 @@ class MainWindow(qtw.QMainWindow):
         inputs['Team'].setItemIcon(2, qtg.QIcon(':/teams/night_terrors.png'))
         inputs['Team'].setItemIcon(3, qtg.QIcon(':/teams/blue_crew.png'))
 
+        libsans_id = qtg.QFontDatabase.addApplicationFont(
+            ':/fonts/LiberationSans-Regular.ttf'
+        )
+        family = qtg.QFontDatabase.applicationFontFamilies(libsans_id)[0]
+        libsans = qtg.QFont(family)
+        inputs['Team'].setFont(libsans)
+
         self.show()
 
 
