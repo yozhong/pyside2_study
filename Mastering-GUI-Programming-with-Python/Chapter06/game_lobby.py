@@ -1,4 +1,5 @@
 import sys
+import resources
 from PySide2 import QtWidgets as qtw
 from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
@@ -92,6 +93,12 @@ class MainWindow(qtw.QMainWindow):
         inputs['Server'].textChanged.connect(
             lambda x: self.submit.setDisabled(x == '')
         )
+
+        # using resources
+        inputs['Team'].setItemIcon(0, qtg.QIcon(':/teams/crimson_sharks.png'))
+        inputs['Team'].setItemIcon(1, qtg.QIcon(':/teams/shadow_hawks.png'))
+        inputs['Team'].setItemIcon(2, qtg.QIcon(':/teams/night_terrors.png'))
+        inputs['Team'].setItemIcon(3, qtg.QIcon(':/teams/blue_crew.png'))
 
         self.show()
 
