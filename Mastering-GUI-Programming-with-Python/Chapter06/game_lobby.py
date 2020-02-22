@@ -107,6 +107,18 @@ class MainWindow(qtw.QMainWindow):
         libsans = qtg.QFont(family)
         inputs['Team'].setFont(libsans)
 
+        ##########
+        # Colors #
+        ##########
+        app = qtw.QApplication.instance()
+        palette = app.palette()
+        palette.setColor(qtg.QPalette.Button, qtg.QColor('#333'))
+        palette.setColor(qtg.QPalette.ButtonText, qtg.QColor('#3F3'))
+        palette.setColor(qtg.QPalette.Disabled, qtg.QPalette.Button, qtg.QColor('#888'))
+        palette.setColor(qtg.QPalette.Disabled, qtg.QPalette.ButtonText, qtg.QColor('#F88'))
+        self.submit.setPalette(palette)
+        self.reset.setPalette(palette)
+
         self.show()
 
 
