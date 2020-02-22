@@ -119,6 +119,18 @@ class MainWindow(qtw.QMainWindow):
         self.submit.setPalette(palette)
         self.reset.setPalette(palette)
 
+        dotted_brush = qtg.QBrush(qtg.QColor('white'), qtc.Qt.Dense2Pattern)
+        gradient = qtg.QLinearGradient(0, 0, self.width(), self.height())
+        gradient.setColorAt(0, qtg.QColor('navy'))
+        gradient.setColorAt(0.5, qtg.QColor('darkred'))
+        gradient.setColorAt(1, qtg.QColor('orange'))
+        gradient_brush = qtg.QBrush(gradient)
+
+        window_palette = app.palette()
+        window_palette.setBrush(qtg.QPalette.Window, gradient_brush)
+        window_palette.setBrush(qtg.QPalette.Active, qtg.QPalette.WindowText, dotted_brush)
+        self.setPalette(window_palette)
+
         self.show()
 
 
