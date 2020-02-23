@@ -131,6 +131,62 @@ class MainWindow(qtw.QMainWindow):
         window_palette.setBrush(qtg.QPalette.Active, qtg.QPalette.WindowText, dotted_brush)
         self.setPalette(window_palette)
 
+        ##################
+        # Qt StyleSheets #
+        ##################
+        stylesheet = """
+        QMainWindow {
+            background-color: black;
+        }
+        QWidget {
+            background-color: transparent;
+            color: #3F3;
+
+        }
+        QLineEdit, QComboBox, QCheckBox {
+            font-size: 16pt;        
+        }
+        """
+
+        stylesheet += """
+        QPushButton
+        {
+            background-color: #333;
+        }
+        QCheckBox::indicator:unchecked
+        {
+            border: 1px solid silver;
+            background-color: darkred;
+        }
+        QCheckBox::indicator:checked
+        {
+            border: 1px solid silver;
+            background-color: #3F3;
+        }
+        """
+
+        # Using discrete classes
+        stylesheet += """
+        .QWidget {
+           background: url(tile.png);
+        }
+        """
+
+        self.submit.setObjectName('SubmitButton')
+        stylesheet += """
+        #SubmitButton:disabled {
+            background-color: #888;
+            color: darkred;
+
+        }
+        """
+
+        for inp in ('Server', 'Name', 'Password'):
+            inp_widget = inputs[inp]
+            inp_widget.setStyleSheet('background-color: black')
+
+        self.setStyleSheet(stylesheet)
+
         self.show()
 
 
