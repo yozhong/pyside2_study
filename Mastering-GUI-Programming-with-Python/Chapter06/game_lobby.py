@@ -204,6 +204,15 @@ class MainWindow(qtw.QMainWindow):
 
         self.setStyleSheet(stylesheet)
 
+        #############
+        # Animation #
+        #############
+        self.heading_animation = qtc.QPropertyAnimation(heading, b'maximumSize')
+        self.heading_animation.setStartValue(qtc.QSize(10, logo.height()))
+        self.heading_animation.setEndValue(qtc.QSize(400, logo.height()))
+        self.heading_animation.setDuration(2000)
+        self.heading_animation.start()
+
         self.show()
 
 
