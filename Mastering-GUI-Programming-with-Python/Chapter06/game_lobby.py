@@ -22,6 +22,30 @@ class StyleOverrides(qtw.QProxyStyle):
             super().drawPrimitive( element, option, painter, widget)
 
 
+class ColorButton(qtw.QPushButton):
+    """Button with color and backgroundColor properties for animation"""
+
+    def _color(self):
+        return self.palette().color(qtg.QPalette.ButtonText)
+
+    def _setColor(self, qcolor):
+        palette = self.palette()
+        palette.setColor(qtg.QPalette.ButtonText, qcolor)
+        self.setPalette(palette)
+
+    color = qtc.Property(qtg.QColor, _color, _setColor)
+
+    @qtc.Property(qtg.QColor)
+    def backgroundColor(self):
+        return self.palette().color(qtg.QPalette.Button)
+
+    @backgroundColor.setter
+    def backgroundColor(self, qcolor):
+        palette = self.palette()
+        palette.setColor(qtg.QPalette.Button, qcolor)
+        self.setPalette(palette)
+
+
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
         """MainWindow constructor"""
@@ -44,15 +68,15 @@ class MainWindow(qtw.QMainWindow):
         inputs['Team'].addItems(teams)
         for label, widget in inputs.items():
             cx_form.layout().addRow(label, widget)
-        self.submit = qtw.QPushButton('Connect')
+        self.submit = ColorButton('Connect')
         self.submit.clicked.connect(
             lambda: qtw.QMessageBox.information(
                 None, 'Connecting', 'Prepare for Battle!'
             )
         )
-        self.reset = qtw.QPushButton('Cancel')
-        self.reset.clicked.connect(self.close)
-        cx_form.layout().addRow(self.submit, self.reset)
+        self.cancel = ColorButton('Cancel')
+        self.cancel.clicked.connect(self.close)
+        cx_form.layout().addRow(self.submit, self.cancel)
 
         #########
         # Fonts #
@@ -83,7 +107,7 @@ class MainWindow(qtw.QMainWindow):
         print(f'Actual font used is {actual_font.family()}'
               f' {actual_font.pointSize()}')
         self.submit.setFont(button_font)
-        self.reset.setFont(button_font)
+        self.cancel.setFont(button_font)
 
         ####################
         # Images and Icons #
@@ -134,7 +158,7 @@ class MainWindow(qtw.QMainWindow):
         palette.setColor(qtg.QPalette.Disabled, qtg.QPalette.Button, qtg.QColor('#888'))
         palette.setColor(qtg.QPalette.Disabled, qtg.QPalette.ButtonText, qtg.QColor('#F88'))
         self.submit.setPalette(palette)
-        self.reset.setPalette(palette)
+        self.cancel.setPalette(palette)
 
         dotted_brush = qtg.QBrush(qtg.QColor('white'), qtc.Qt.Dense2Pattern)
         gradient = qtg.QLinearGradient(0, 0, self.width(), self.height())
@@ -202,22 +226,46 @@ class MainWindow(qtw.QMainWindow):
             inp_widget = inputs[inp]
             inp_widget.setStyleSheet('background-color: black')
 
-        self.setStyleSheet(stylesheet)
+        # self.setStyleSheet(stylesheet)
 
         #############
         # Animation #
         #############
-        self.heading_animation = qtc.QPropertyAnimation(heading, b'maximumSize')
+        self.heading_animation = qtc.QPropertyAnimation(heading, qtc.QByteArray(b'maximumSize'))
         self.heading_animation.setStartValue(qtc.QSize(10, logo.height()))
-        self.heading_animation.setEndValue(qtc.QSize(400, logo.height()))
+        self.heading_animation.setEndValue(qtc.QSize(500, logo.height()))
         self.heading_animation.setDuration(2000)
-        self.heading_animation.start()
+
+        self.text_color_animation = qtc.QPropertyAnimation(self.submit, qtc.QByteArray(b'color'))
+        self.text_color_animation.setStartValue(qtg.QColor('#FFF'))
+        self.text_color_animation.setEndValue(qtg.QColor('#888'))
+        self.text_color_animation.setLoopCount(-1)
+        self.text_color_animation.setEasingCurve(qtc.QEasingCurve.InOutQuad)
+        self.text_color_animation.setDuration(2000)
+
+        self.bg_color_animation = qtc.QPropertyAnimation(self.submit, qtc.QByteArray(b'backgroundColor'))
+        self.bg_color_animation.setStartValue(qtg.QColor('#000'))
+        self.bg_color_animation.setKeyValueAt(0.5, qtg.QColor('darkred'))
+        self.bg_color_animation.setEndValue(qtg.QColor('#000'))
+        self.bg_color_animation.setLoopCount(-1)
+        self.bg_color_animation.setDuration(1500)
+
+        self.button_animations = qtc.QParallelAnimationGroup()
+        self.button_animations.addAnimation(self.text_color_animation)
+        self.button_animations.addAnimation(self.bg_color_animation)
+
+        self.all_animations = qtc.QSequentialAnimationGroup()
+        self.all_animations.addAnimation(self.heading_animation)
+        self.all_animations.addAnimation(self.button_animations)
+        self.all_animations.start()
 
         self.show()
 
 
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
+    windows_style = qtw.QStyleFactory.create('Windows')
+    app.setStyle(windows_style)
     proxy_style = StyleOverrides()
     app.setStyle(proxy_style)
     mw = MainWindow()
