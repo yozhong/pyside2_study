@@ -5,6 +5,13 @@ from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
 
 
+class StyleOverrides(qtw.QProxyStyle):
+    def drawItemText(self, painter, rect, flags, palette, enabled, text, textRole=None):
+        """Force uppercase in all text"""
+        text = text.upper()
+        super().drawItemText( painter, rect, flags, palette, enabled, text, textRole)
+
+
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
         """MainWindow constructor"""
@@ -192,7 +199,7 @@ class MainWindow(qtw.QMainWindow):
 
 if __name__ == '__main__':
     app = qtw.QApplication(sys.argv)
-    windows_style = qtw.QStyleFactory.create('Windows')
-    app.setStyle(windows_style)
+    proxy_style = StyleOverrides()
+    app.setStyle(proxy_style)
     mw = MainWindow()
     sys.exit(app.exec_())
