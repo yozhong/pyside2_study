@@ -11,6 +11,16 @@ class StyleOverrides(qtw.QProxyStyle):
         text = text.upper()
         super().drawItemText( painter, rect, flags, palette, enabled, text, textRole)
 
+    def drawPrimitive(self, element, option, painter, widget=None):
+        """Outline QLineEdits in Green"""
+        self.green_pen = qtg.QPen(qtg.QColor('green'))
+        self.green_pen.setWidth(4)
+        if element == qtw.QStyle.PE_FrameLineEdit:
+            painter.setPen(self.green_pen)
+            painter.drawRoundedRect(widget.rect(), 10, 10)
+        else:
+            super().drawPrimitive( element, option, painter, widget)
+
 
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
