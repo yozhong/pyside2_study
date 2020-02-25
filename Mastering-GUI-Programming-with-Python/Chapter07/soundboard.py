@@ -32,6 +32,10 @@ class SoundWidget(qtw.QWidget):
         self.player.durationChanged.connect(self.position.setMaximum)
         self.position.sliderMoved.connect(self.player.setPosition)
 
+        self.loop_cb = qtw.QCheckBox('Loop')
+        self.loop_cb.stateChanged.connect(self.on_loop_cb)
+        self.layout().addWidget(self.loop_cb, 2, 0)
+
 
     def on_playbutton(self):
         if self.player.state() == qtmm.QMediaPlayer.PlayingState:
@@ -50,9 +54,20 @@ class SoundWidget(qtw.QWidget):
             self.set_file(fn)
 
     def set_file(self, url):
-        content = qtmm.QMediaContent(url)
-        self.player.setMedia(content)
         self.label.setText(url.fileName())
+        content = qtmm.QMediaContent(url)
+        # self.player.setMedia(content)
+        self.playlist = qtmm.QMediaPlaylist()
+        self.playlist.addMedia(content)
+        self.playlist.setCurrentIndex(1)
+        self.player.setPlaylist(self.playlist)
+        self.loop_cb.setChecked(False)
+
+    def on_loop_cb(self, state):
+        if state == qtc.Qt.Checked:
+            self.playlist.setPlaybackMode(qtmm.QMediaPlaylist.CurrentItemInLoop)
+        else:
+            self.playlist.setPlaybackMode(qtmm.QMediaPlaylist.CurrentItemOnce)
 
 
 class PlayButton(qtw.QPushButton):
