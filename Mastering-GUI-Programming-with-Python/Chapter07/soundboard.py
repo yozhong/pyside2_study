@@ -23,6 +23,16 @@ class SoundWidget(qtw.QWidget):
         self.file_button.clicked.connect(self.get_file)
         self.layout().addWidget(self.file_button, 4, 0)
 
+        self.position = qtw.QSlider()
+        self.position.setMinimum(0)
+        self.position.setOrientation(qtc.Qt.Horizontal)
+        self.layout().addWidget(self.position, 1, 0, 1, 2)
+
+        self.player.positionChanged.connect(self.position.setSliderPosition)
+        self.player.durationChanged.connect(self.position.setMaximum)
+        self.position.sliderMoved.connect(self.player.setPosition)
+
+
     def on_playbutton(self):
         if self.player.state() == qtmm.QMediaPlayer.PlayingState:
             self.player.stop()
