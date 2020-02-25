@@ -36,6 +36,13 @@ class SoundWidget(qtw.QWidget):
         self.loop_cb.stateChanged.connect(self.on_loop_cb)
         self.layout().addWidget(self.loop_cb, 2, 0)
 
+        self.volume = qtw.QSlider()
+        self.volume.setMinimum(0)
+        self.volume.setMaximum(100)
+        self.volume.setSliderPosition(75)
+        self.volume.setOrientation(qtc.Qt.Horizontal)
+        self.volume.sliderMoved.connect(self.player.setVolume)
+        self.layout().addWidget(self.volume, 2, 1)
 
     def on_playbutton(self):
         if self.player.state() == qtmm.QMediaPlayer.PlayingState:
