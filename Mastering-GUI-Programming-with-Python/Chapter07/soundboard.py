@@ -19,11 +19,30 @@ class SoundWidget(qtw.QWidget):
         self.play_button.clicked.connect(self.on_playbutton)
         self.player.stateChanged.connect(self.play_button.on_state_changed)
 
+        self.file_button = qtw.QPushButton('Load File')
+        self.file_button.clicked.connect(self.get_file)
+        self.layout().addWidget(self.file_button, 4, 0)
+
     def on_playbutton(self):
         if self.player.state() == qtmm.QMediaPlayer.PlayingState:
             self.player.stop()
         else:
             self.player.play()
+
+    def get_file(self):
+        fn, _ = qtw.QFileDialog.getOpenFileUrl(
+            self,
+            'Select File',
+            qtc.QDir.homePath(),
+            'Audio files (*.wav *.flac *.mp3 *.ogg *.aiff);; All files (*)'
+        )
+        if fn:
+            self.set_file(fn)
+
+    def set_file(self, url):
+        content = qtmm.QMediaContent(url)
+        self.player.setMedia(content)
+        self.label.setText(url.fileName())
 
 
 class PlayButton(qtw.QPushButton):
