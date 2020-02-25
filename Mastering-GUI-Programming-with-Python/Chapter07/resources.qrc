@@ -1,0 +1,16 @@
+<RCC>
+  <qresource prefix="dtmf">
+    <file alias="1.wav">DTMF/dtmf_1.wav</file>
+    <file alias="2.wav">DTMF/dtmf_2.wav</file>
+    <file alias="3.wav">DTMF/dtmf_3.wav</file>
+    <file alias="4.wav">DTMF/dtmf_4.wav</file>
+    <file alias="5.wav">DTMF/dtmf_5.wav</file>
+    <file alias="6.wav">DTMF/dtmf_6.wav</file>
+    <file alias="7.wav">DTMF/dtmf_7.wav</file>
+    <file alias="8.wav">DTMF/dtmf_8.wav</file>
+    <file alias="9.wav">DTMF/dtmf_9.wav</file>
+    <file alias="0.wav">DTMF/dtmf_0.wav</file>
+    <file alias="*.wav">DTMF/dtmf_star.wav</file>
+    <file alias="#.wav">DTMF/dtmf_pound.wav</file>
+  </qresource>
+</RCC>
