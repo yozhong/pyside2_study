@@ -44,6 +44,23 @@ class SoundWidget(qtw.QWidget):
         self.volume.sliderMoved.connect(self.player.setVolume)
         self.layout().addWidget(self.volume, 2, 1)
 
+        self.recorder = qtmm.QAudioRecorder()
+        # self.recorder.setAudioInput('default:')
+        # sample_path = qtc.QDir.home().filePath('sample1')
+        # self.recorder.setOutputLocation(qtc.QUrl.fromLocalFile(sample_path))
+        # self.recorder.setContainerFormat('audio/x-wav')
+        # settings = qtmm.QAudioEncoderSettings()
+        # settings.setCodec('audio/pcm')
+        # settings.setSampleRate(44100)
+        # settings.setQuality(qtmm.QMultimedia.HighQuality)
+        # self.recorder.setEncodingSettings(settings)
+
+
+        self.record_button = RecordButton()
+        self.recorder.stateChanged.connect(self.record_button.on_state_changed)
+        self.layout().addWidget(self.record_button, 4, 1)
+        self.record_button.clicked.connect(self.on_recordbutton)
+
     def on_playbutton(self):
         if self.player.state() == qtmm.QMediaPlayer.PlayingState:
             self.player.stop()
@@ -61,6 +78,8 @@ class SoundWidget(qtw.QWidget):
             self.set_file(fn)
 
     def set_file(self, url):
+        if url.scheme() == '':
+            url.setScheme('file')
         self.label.setText(url.fileName())
         content = qtmm.QMediaContent(url)
         # self.player.setMedia(content)
@@ -75,6 +94,14 @@ class SoundWidget(qtw.QWidget):
             self.playlist.setPlaybackMode(qtmm.QMediaPlaylist.CurrentItemInLoop)
         else:
             self.playlist.setPlaybackMode(qtmm.QMediaPlaylist.CurrentItemOnce)
+
+    def on_recordbutton(self):
+        if self.recorder.state() == qtmm.QMediaRecorder.RecordingState:
+            self.recorder.stop()
+            url = self.recorder.actualLocation()
+            self.set_file(url)
+        else:
+            self.recorder.record()
 
 
 class PlayButton(qtw.QPushButton):
@@ -94,6 +121,22 @@ class PlayButton(qtw.QPushButton):
         else:
             self.setStyleSheet(self.play_stylesheet)
             self.setText('Play')
+
+
+class RecordButton(qtw.QPushButton):
+    record_stylesheet = 'background-color: black; color: white;'
+    stop_stylesheet = 'background-color: darkred; color: white;'
+
+    def __init__(self):
+        super().__init__('Record')
+
+    def on_state_changed(self, state):
+        if state == qtmm.QAudioRecorder.RecordingState:
+            self.setStyleSheet(self.stop_stylesheet)
+            self.setText('Stop')
+        else:
+            self.setStyleSheet(self.record_stylesheet)
+            self.setText('Record')
 
 
 class MainWindow(qtw.QMainWindow):
