@@ -2,15 +2,63 @@ import sys
 from PySide2 import QtWidgets as qtw
 from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
+from PySide2 import QtMultimedia as qtmm
+
+
+class SoundWidget(qtw.QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setLayout(qtw.QGridLayout())
+        self.label = qtw.QLabel('No file loaded')
+        self.layout().addWidget(self.label, 0, 0, 1, 2)
+
+        self.play_button = PlayButton()
+        self.layout().addWidget(self.play_button, 3, 0, 1, 2)
+
+        self.player = qtmm.QMediaPlayer()
+        self.play_button.clicked.connect(self.on_playbutton)
+        self.player.stateChanged.connect(self.play_button.on_state_changed)
+
+    def on_playbutton(self):
+        if self.player.state() == qtmm.QMediaPlayer.PlayingState:
+            self.player.stop()
+        else:
+            self.player.play()
+
+
+class PlayButton(qtw.QPushButton):
+    play_stylesheet = 'background-color: lightgreen; color: black;'
+    stop_stylesheet = 'background-color: darkred; color: white;'
+
+    def __init__(self):
+        super().__init__('Play')
+        self.setFont(qtg.QFont('Sans', 32, qtg.QFont.Bold))
+        self.setSizePolicy(qtw.QSizePolicy.Expanding, qtw.QSizePolicy.Expanding)
+        self.setStyleSheet(self.play_stylesheet)
+
+    def on_state_changed(self, state):
+        if state == qtmm.QMediaPlayer.PlayingState:
+            self.setStyleSheet(self.stop_stylesheet)
+            self.setText('Stop')
+        else:
+            self.setStyleSheet(self.play_stylesheet)
+            self.setText('Play')
 
 
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
         """MainWindow constructor"""
         super().__init__()
-        # Main UI code goes here
+        rows = 3
+        columns = 3
+        soundboard = qtw.QWidget()
+        soundboard.setLayout(qtw.QGridLayout())
+        self.setCentralWidget(soundboard)
+        for c in range(columns):
+            for r in range(rows):
+                sw = SoundWidget()
+                soundboard.layout().addWidget(sw, c, r)
 
-        # End main UI code
         self.show()
 
 
