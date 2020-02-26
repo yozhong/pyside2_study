@@ -2,6 +2,8 @@ import sys
 from PySide2 import QtWidgets as qtw
 from PySide2 import QtGui as qtg
 from PySide2 import QtCore as qtc
+from PySide2 import QtMultimedia as qtmm
+from PySide2 import QtMultimediaWidgets as qtmmw
 
 
 class MainWindow(qtw.QMainWindow):
@@ -29,6 +31,18 @@ class MainWindow(qtw.QMainWindow):
 
         self.refresh_video_list()
 
+        self.player = qtmm.QMediaPlayer()
+        self.video_widget = qtmmw.QVideoWidget()
+        self.player.setVideoOutput(self.video_widget)
+
+        notebook.addTab(self.video_widget, 'Play')
+        play_act.triggered.connect(self.player.play)
+        pause_act.triggered.connect(self.player.pause)
+        stop_act.triggered.connect(self.player.stop)
+        play_act.triggered.connect(lambda: notebook.setCurrentWidget(self.video_widget))
+        self.file_list.itemDoubleClicked.connect(self.on_file_selected)
+        self.file_list.itemDoubleClicked.connect(lambda: notebook.setCurrentWidget(self.video_widget))
+
         self.show()
 
     def refresh_video_list(self):
@@ -39,6 +53,13 @@ class MainWindow(qtw.QMainWindow):
         )
         for fn in sorted(video_files):
             self.file_list.addItem(fn)
+
+    def on_file_selected(self, item):
+        fn = item.text()
+        url = qtc.QUrl.fromLocalFile(self.video_dir.filePath(fn))
+        content = qtmm.QMediaContent(url)
+        self.player.setMedia(content)
+        self.player.play()
 
 
 if __name__ == '__main__':
