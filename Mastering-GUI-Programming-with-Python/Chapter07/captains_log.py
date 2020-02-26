@@ -43,6 +43,24 @@ class MainWindow(qtw.QMainWindow):
         self.file_list.itemDoubleClicked.connect(self.on_file_selected)
         self.file_list.itemDoubleClicked.connect(lambda: notebook.setCurrentWidget(self.video_widget))
 
+        self.camera = self.camera_check()
+        if not self.camera:
+            self.show()
+            return
+        self.camera.setCaptureMode(qtmm.QCamera.CaptureVideo)
+        self.cvf = qtmmw.QCameraViewfinder()
+        self.camera.setViewfinder(self.cvf)
+        notebook.addTab(self.cvf, 'Record')
+        self.camera.start()
+
+        self.recorder = qtmm.QMediaRecorder(self.camera)
+
+        settings = self.recorder.videoSettings()
+        settings.setResolution(640, 480)
+        settings.setFrameRate(24.0)
+        settings.setQuality(qtmm.QMultimedia.VeryHighQuality)
+        self.recorder.setVideoSettings(settings)
+
         self.show()
 
     def refresh_video_list(self):
@@ -60,6 +78,13 @@ class MainWindow(qtw.QMainWindow):
         content = qtmm.QMediaContent(url)
         self.player.setMedia(content)
         self.player.play()
+
+    def camera_check(self):
+        cameras = qtmm.QCameraInfo.availableCameras()
+        if not cameras:
+            qtw.QMessageBox.critical(self, 'No cameras', 'No cameras were found, recording disabled.')
+        else:
+            return qtmm.QCamera(cameras[0])
 
 
 if __name__ == '__main__':
