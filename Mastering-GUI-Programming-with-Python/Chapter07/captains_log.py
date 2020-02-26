@@ -61,6 +61,12 @@ class MainWindow(qtw.QMainWindow):
         settings.setQuality(qtmm.QMultimedia.VeryHighQuality)
         self.recorder.setVideoSettings(settings)
 
+        record_act.triggered.connect(self.record)
+        record_act.triggered.connect(lambda: notebook.setCurrentWidget(self.cvf))
+        pause_act.triggered.connect(self.recorder.pause)
+        stop_act.triggered.connect(self.recorder.stop)
+        stop_act.triggered.connect(self.refresh_video_list)
+
         self.show()
 
     def refresh_video_list(self):
@@ -85,6 +91,16 @@ class MainWindow(qtw.QMainWindow):
             qtw.QMessageBox.critical(self, 'No cameras', 'No cameras were found, recording disabled.')
         else:
             return qtmm.QCamera(cameras[0])
+
+    def record(self):
+        # create a filename
+        datestamp = qtc.QDateTime.currentDateTime().toString()
+        self.mediafile = qtc.QUrl.fromLocalFile(
+            self.video_dir.filePath('log - ' + datestamp)
+        )
+        self.recorder.setOutputLocation(self.mediafile)
+        # start record
+        self.recorder.record()
 
 
 if __name__ == '__main__':
