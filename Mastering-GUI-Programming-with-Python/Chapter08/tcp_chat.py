@@ -42,7 +42,7 @@ class UdpChatInterface(qtc.QObject):
         self.username = username
 
         self.socket = qtn.QUdpSocket()
-        self.socket.bind(qtn.QHostAddress.Any, self.port)
+        self.socket.bind(qtn.QHostAddress(qtn.QHostAddress.Any), self.port)
         self.socket.readyRead.connect(self.process_datagrams)
         self.socket.error.connect(self.on_error)
 
@@ -72,6 +72,13 @@ class MainWindow(qtw.QMainWindow):
         super().__init__()
         self.cw = ChatWindow()
         self.setCentralWidget(self.cw)
+
+        username = qtc.QDir.home().dirName()
+        self.interface = UdpChatInterface(username)
+        self.cw.submitted.connect(self.interface.send_message)
+        self.interface.received.connect(self.cw.write_message)
+        self.interface.error.connect(lambda x: qtw.QMessageBox.critical(None, 'Error', x))
+
         self.show()
 
 
