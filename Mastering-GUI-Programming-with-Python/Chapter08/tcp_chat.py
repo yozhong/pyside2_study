@@ -31,6 +31,41 @@ class ChatWindow(qtw.QWidget):
             self.message_entry.clear()
 
 
+class UdpChatInterface(qtc.QObject):
+    port = 7777
+    delimiter = '||'
+    received = qtc.Signal(str, str)
+    error = qtc.Signal(str)
+
+    def __init__(self, username):
+        super().__init__()
+        self.username = username
+
+        self.socket = qtn.QUdpSocket()
+        self.socket.bind(qtn.QHostAddress.Any, self.port)
+        self.socket.readyRead.connect(self.process_datagrams)
+        self.socket.error.connect(self.on_error)
+
+    def on_error(self, socket_error):
+        error_index = qtn.QAbstractSocket.staticMetaObject.indexOfEnumerator('SocketError')
+        error = qtn.QAbstractSocket.staticMetaObect.enumerator(error_index).valueToKey(socket_error)
+        message = f'There was a network error: {error}'
+        self.error.emit(message)
+
+    def process_datagrams(self):
+        while self.socket.hasPendingDatagrams():
+            datagram = self.socket.receiveDatagram()
+            raw_message = bytes(datagram.data()).decode('utf-8')
+            if self.delimiter not in raw_message:
+                continue
+            username, message = raw_message.split(self.delimiter, 1)
+            self.received.emit(username, message)
+
+    def send_message(self, message):
+        msg_bytes = f'{self.username}{self.delimiter}{message}'.encode('utf-8')
+        self.socket.writeDatagram(qtc.QByteArray(msg_bytes), qtn.QHostAddress.Broadcast, self.port)
+
+
 class MainWindow(qtw.QMainWindow):
     def __init__(self):
         """MainWindow constructor"""
